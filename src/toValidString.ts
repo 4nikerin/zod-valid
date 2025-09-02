@@ -75,8 +75,8 @@ type ToValidStringOptions<T extends z.ZodType, K = null> = {
  *
  * @example
  * const schema = toValidString({ allow: "optional" });
- * schema.parse(undefined);  // undefined
  * schema.parse(null);       // "null"  (null is coerced to string)
+ * schema.parse(undefined);  // undefined
  *
  * @example
  * const schema = toValidString({ allow: "nullable", fallback: "N/A", preserve: false });

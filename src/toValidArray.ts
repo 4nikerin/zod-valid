@@ -70,13 +70,13 @@ type ToValidArrayOptions<T extends z.ZodType, K = null> = {
  *
  * @example
  * const schema = toValidArray({ type: z.number(), allow: "optional" });
- * schema.parse(undefined);  // undefined
  * schema.parse(null);       // null
+ * schema.parse(undefined);  // undefined
  *
  * @example
  * const schema = toValidArray({ type: z.number(), allow: "nullable", fallback: [], preserve: false });
- * schema.parse(null);       // []
- * schema.parse("oops");     // [] (any invalid value → fallback)
+ * schema.parse(null);       // null
+ * schema.parse("oops");     // null
  */
 
 export function toValidArray<T extends z.ZodType, K = null>(

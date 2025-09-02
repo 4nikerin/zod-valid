@@ -77,19 +77,19 @@ type ToValidNumberOptions<T extends z.ZodType = z.ZodNumber, K = null> = {
  *
  * @example
  * const schema = toValidNumber({ allow: "optional" });
- * schema.parse(undefined); // undefined
  * schema.parse(null);      // null replaced with "null" logic → returns fallback if preserve=false
+ * schema.parse(undefined); // undefined
  *
  * @example
  * const schema = toValidNumber({ allow: "nullable", fallback: 0, preserve: false });
- * schema.parse(null);      // 0
  * schema.parse("oops");    // 0 (invalid string replaced with fallback)
+ * schema.parse(null);      // 0
  *
  * @example
  * const schema = toValidNumber({ allow: "nullish", fallback: 99, preserve: false });
+ * schema.parse("abc");     // 99 (invalid string → fallback)
  * schema.parse(null);      // 99
  * schema.parse(undefined); // 99
- * schema.parse("abc");     // 99 (invalid string → fallback)
  */
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(

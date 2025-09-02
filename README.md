@@ -85,8 +85,8 @@ schema.parse(123);                    // "123"
 schema.parse(null);                   // null  (default allow="nullish", preserve=true)
 
 const schema = toValidString({ allow: "optional" });
-schema.parse(undefined);              // undefined
 schema.parse(null);                   // "null"  (null is coerced to string)
+schema.parse(undefined);              // undefined
 
 const schema = toValidString({ allow: "nullable", fallback: "N/A", preserve: false });
 schema.parse(null);                   // "N/A"
@@ -155,17 +155,17 @@ schema.parse("123");     // 123
 schema.parse(null);      // null (default allow="nullish", preserve=true)
 
 const schema = toValidNumber({ allow: "optional" });
-schema.parse(undefined); // undefined
 schema.parse(null);      // null replaced with "null" logic → returns fallback if preserve=false
+schema.parse(undefined); // undefined
 
 const schema = toValidNumber({ allow: "nullable", fallback: 0, preserve: false });
-schema.parse(null);      // 0
 schema.parse("oops");    // 0 (invalid string replaced with fallback)
+schema.parse(null);      // 0
 
 const schema = toValidNumber({ allow: "nullish", fallback: 99, preserve: false });
+schema.parse("abc");     // 99 (invalid string → fallback)
 schema.parse(null);      // 99
 schema.parse(undefined); // 99
-schema.parse("abc");     // 99 (invalid string → fallback)
 ```
 
 ### toValidISO
@@ -217,16 +217,12 @@ schema.parse("2025-09-02 10:00");  // "2025-09-02T10:00:00Z"
 schema.parse(null);                // null (default allow="nullish", preserve=true)
 
 const schema = toValidISO({ allow: "optional" });
+schema.parse(null);                // null (default fallback)
 schema.parse(undefined);           // undefined
-schema.parse(null);                // fallback (null coerced if preserve=false)
 
 const schema = toValidISO({ allow: "nullable", fallback: "1970-01-01T00:00:00Z", preserve: false });
 schema.parse(null);                // "1970-01-01T00:00:00Z"
 schema.parse("invalid");           // "1970-01-01T00:00:00Z"
-
-const schema = toValidISO({ allow: "nullish", fallback: "2000-01-01T00:00:00Z", preserve: false });
-schema.parse(null);                // "2000-01-01T00:00:00Z"
-schema.parse(undefined);           // "2000-01-01T00:00:00Z"
 ```
 
 ### toValidEnum
@@ -271,19 +267,19 @@ Examples:
 ```ts
 import { toValidEnum } from "zod-valid";
 
-const schema = toValidEnum({ a: "A", b: "B" });
+const schema = toValidEnum({ type: { a: "A", b: "B" } });
 schema.parse("A");        // "A"
 schema.parse("C");        // null (default fallback)
 schema.parse(null);       // null (default allow="nullish", preserve=true)
 
-const schema = toValidEnum({ a: "A", b: "B" }, { allow: "optional" });
+const schema = toValidEnum({ type: { a: "A", b: "B" }, allow: "optional" });
+schema.parse(null);       // null (default fallback)
 schema.parse(undefined);  // undefined
-schema.parse(null);       // fallback (null coerced if preserve=false)
 
-const schema = toValidEnum({ a: "A", b: "B" }, { allow: "nullable", fallback: "A", preserve: false });
-schema.parse(null);       // "A"
+const schema = toValidEnum({ type: { a: "A", b: "B" }, allow: "nullable", fallback: "A", preserve: false });
 schema.parse("C");        // "A" (invalid value → fallback)
-``
+schema.parse(null);       // null
+```
 
 ### toValidBoolean
 
@@ -337,8 +333,8 @@ schema.parse(0);           // false
 schema.parse(null);        // null (default allow="nullish", preserve=true)
 
 const schema = toValidBoolean({ allow: "optional" });
+schema.parse(null);        // false
 schema.parse(undefined);   // undefined
-schema.parse(null);        // fallback (null coerced if preserve=false)
 
 const schema = toValidBoolean({ allow: "nullable", fallback: true, preserve: false });
 schema.parse(null);        // true
@@ -391,19 +387,57 @@ const schema = toValidArray(z.string());
 schema.parse(["a", "b"]); // ["a", "b"]
 schema.parse(null);       // null (default allow="nullish", preserve=true)
 
-const schema = toValidArray({ type: z.number(), allow: "optional" });
-schema.parse(undefined);  // undefined
+const schema = toValidArray({ type: z.coerce.number(), allow: "optional" });
 schema.parse(null);       // null
+schema.parse(undefined);  // undefined
 
 const schema = toValidArray({ type: z.number(), allow: "nullable", fallback: [], preserve: false });
-schema.parse(null);       // []
-schema.parse("oops");     // [] (any invalid value → fallback)
+schema.parse(null);       // null
+schema.parse("oops");     // null
 ```
 
 ## Examples
 
 ℹ️ You can find all possible usage examples for each function in the [tests folder](./tests).
 
+```ts
+import { z } from "zod";
+import {
+  toValidNumber,
+  toValidString,
+  toValidISO,
+  toValidArray,
+  toValidBoolean,
+} from "zod-valid";
+
+const ResponseSchema = toValidArray({
+  type: z.object({
+    id: toValidNumber({ allow: "none", fallback: 0 }),
+    name: toValidString(),
+    email: toValidString({ type: z.email(), fallback: "N/A" }),
+    isActive: toValidBoolean(),
+    createdAt: toValidISO(),
+  }),
+  fallback: [],
+  preserve: false,
+});
+
+async function getUser() {
+  const response = await fetch("/api/users", {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+
+  const rawData = await response.json();
+  const validData = ResponseSchema.parse(rawData);
+
+  return validData.filter((user) => user.id > 0);
+}
+```
+
 ## License
 
-MIT © 2025 Nikerin Evgenii <4nikerin@gmail.com> (https://github.com/nikerin)
+MIT © 2025 Nikerin Evgenii <4nikerin@gmail.com> (https://github.com/4nikerin)

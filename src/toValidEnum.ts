@@ -67,20 +67,20 @@ type ToValidEnumOptions<T extends { [k: string]: string | number }, K = null> = 
  *   - Optionally wraps with `.optional()`, `.nullable()`, or `.nullish()` based on `allow`.
  *
  * @example
- * const schema = toValidEnum({ a: "A", b: "B" });
+ * const schema = toValidEnum({ type: { a: "A", b: "B" } });
  * schema.parse("A");        // "A"
  * schema.parse("C");        // null (default fallback)
  * schema.parse(null);       // null (default allow="nullish", preserve=true)
  *
  * @example
- * const schema = toValidEnum({ a: "A", b: "B" }, { allow: "optional" });
+ * const schema = toValidEnum({ type: { a: "A", b: "B" }, allow: "optional" });
+ * schema.parse(null);       // null (default fallback)
  * schema.parse(undefined);  // undefined
- * schema.parse(null);       // fallback (null coerced if preserve=false)
  *
  * @example
- * const schema = toValidEnum({ a: "A", b: "B" }, { allow: "nullable", fallback: "A", preserve: false });
- * schema.parse(null);       // "A"
+ * const schema = toValidEnum({ type: { a: "A", b: "B" }, allow: "nullable", fallback: "A", preserve: false });
  * schema.parse("C");        // "A" (invalid value → fallback)
+ * schema.parse(null);       // null
  */
 
 export function toValidEnum<T extends { [k: string]: string | number }, K = null>(

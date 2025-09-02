@@ -72,22 +72,17 @@ type ToValidISOOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
  * @example
  * const schema = toValidISO();
  * schema.parse("2025-09-02T10:00:00Z");  // "2025-09-02T10:00:00Z"
- * schema.parse(null);                     // null (default allow="nullish", preserve=true)
+ * schema.parse(null);                    // null (default allow="nullish", preserve=true)
  *
  * @example
  * const schema = toValidISO({ allow: "optional" });
- * schema.parse(undefined);  // undefined
- * schema.parse(null);       // fallback (null coerced if preserve=false)
+ * schema.parse(undefined);               // undefined
+ * schema.parse(null);                    // null (default fallback)
  *
  * @example
  * const schema = toValidISO({ allow: "nullable", fallback: "1970-01-01T00:00:00Z", preserve: false });
- * schema.parse(null);       // "1970-01-01T00:00:00Z"
- * schema.parse("invalid");  // "1970-01-01T00:00:00Z"
- *
- * @example
- * const schema = toValidISO({ allow: "nullish", preserve: true });
- * schema.parse(null);       // null
- * schema.parse(undefined);  // undefined
+ * schema.parse(null);                    // "1970-01-01T00:00:00Z"
+ * schema.parse("invalid");               // "1970-01-01T00:00:00Z"
  */
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(

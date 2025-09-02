@@ -79,8 +79,8 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  *
  * @example
  * const schema = toValidBoolean({ allow: "optional" });
+ * schema.parse(null);        // false
  * schema.parse(undefined);   // undefined
- * schema.parse(null);        // fallback (null coerced if preserve=false)
  *
  * @example
  * const schema = toValidBoolean({ allow: "nullable", fallback: true, preserve: false });

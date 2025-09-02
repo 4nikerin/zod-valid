@@ -1,0 +1,54 @@
+{
+  "name": "zod-valid",
+  "version": "1.0.0",
+  "description": "Lightweight utilities for flexible Zod schema validation (string, number, array, boolean, enum, ISO).",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "vitest",
+    "test:types": "tsc --noEmit",
+    "test:all": "npm run test:types && npm run test",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write .",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4nikerin/zod-valid.git"
+  },
+  "keywords": [
+    "zod",
+    "validation",
+    "schema",
+    "typescript",
+    "utility"
+  ],
+  "author": "Nikerin Evgenii <4nikerin@gmail.com> (https://github.com/nikerin)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4nikerin/zod-valid/issues"
+  },
+  "homepage": "https://github.com/4nikerin/zod-valid#readme",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.6.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4",
+    "zod": "^4.0.0"
+  },
+  "peerDependencies": {
+    "zod": ">=4.1.5"
+  }
+}

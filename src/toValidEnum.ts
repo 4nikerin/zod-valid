@@ -87,10 +87,8 @@ export function toValidEnum<T extends { [k: string]: string | number }, K = null
   options: ToValidEnumOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform,
-  NonNullable<
-    | z.ZodEnum<T>
-    | (K extends never[] ? z.ZodEnum<T> : K extends null | undefined ? z.ZodEnum<T> : z.ZodType<K>)
-  >
+  | z.ZodEnum<T>
+  | (K extends never[] ? z.ZodEnum<T> : K extends null | undefined ? z.ZodEnum<T> : z.ZodType<K>)
 >;
 
 export function toValidEnum<T extends { [k: string]: string | number }, K = null>(
@@ -122,7 +120,7 @@ export function toValidEnum<T extends { [k: string]: string | number }, K>(
   let finalSchema;
   switch (allow) {
     case "none":
-      finalSchema = baseSchema.or(z.custom<K>((val) => val === fallback && val != null)).optional();
+      finalSchema = baseSchema.or(z.custom<K>((val) => val === fallback && val != null));
       break;
     case "optional":
       finalSchema = baseSchema.or(z.custom<K>((val) => val === fallback)).optional();

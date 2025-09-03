@@ -83,14 +83,8 @@ export function toValidArray<T extends z.ZodType, K = null>(
   options: ToValidArrayOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform,
-  NonNullable<
-    | z.ZodArray<T>
-    | (K extends never[]
-        ? z.ZodArray<T>
-        : K extends null | undefined
-          ? z.ZodArray<T>
-          : z.ZodType<K>)
-  >
+  | z.ZodArray<T>
+  | (K extends never[] ? z.ZodArray<T> : K extends null | undefined ? z.ZodArray<T> : z.ZodType<K>)
 >;
 
 export function toValidArray<T extends z.ZodType, K = null>(
@@ -133,7 +127,7 @@ export function toValidArray<T extends z.ZodType, K>(options: ToValidArrayOption
   let finalSchema;
   switch (allow) {
     case "none":
-      finalSchema = baseSchema.or(z.custom<K>((val) => val === fallback && val != null)).optional();
+      finalSchema = baseSchema.or(z.custom<K>((val) => val === fallback && val != null));
       break;
     case "optional":
       finalSchema = (

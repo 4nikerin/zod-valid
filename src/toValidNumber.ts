@@ -96,13 +96,11 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform,
-  NonNullable<
-    T extends z.ZodNumber
-      ? z.ZodNumber | (K extends null | undefined ? z.ZodType<z.infer<T>> : z.ZodType<K>)
-      : K extends null | undefined
-        ? z.ZodType<z.infer<T>>
-        : z.ZodType<K>
-  >
+  T extends z.ZodNumber
+    ? z.ZodNumber | (K extends null | undefined ? z.ZodType<z.infer<T>> : z.ZodType<K>)
+    : K extends null | undefined
+      ? z.ZodType<z.infer<T>>
+      : z.ZodType<K>
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
@@ -136,7 +134,7 @@ export function toValidNumber<T extends z.ZodType, K>(options: ToValidNumberOpti
   let finalSchema;
   switch (allow) {
     case "none":
-      finalSchema = type.or(z.custom<K>((val) => val === fallback && val != null)).optional();
+      finalSchema = type.or(z.custom<K>((val) => val === fallback && val != null));
       break;
     case "optional":
       finalSchema = type.or(z.custom<K>((val) => val === fallback)).optional();

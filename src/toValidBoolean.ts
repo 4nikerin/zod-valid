@@ -114,7 +114,7 @@ export function toValidBoolean<T extends z.ZodType, K>(options: ToValidBooleanOp
   let finalSchema;
   switch (allow) {
     case "none":
-      finalSchema = type.or(z.custom<K>((val) => val === fallback && val != null)).optional();
+      finalSchema = type.or(z.custom<K>((val) => val === fallback && val != null));
       break;
     case "optional":
       finalSchema = type.or(z.custom<K>((val) => val === fallback)).optional();

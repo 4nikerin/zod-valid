@@ -1,6 +1,6 @@
 {
   "name": "zod-valid",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Lightweight utilities for flexible Zod schema validation (string, number, array, boolean, enum, ISO).",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

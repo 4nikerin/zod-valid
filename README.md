@@ -3,6 +3,8 @@
 A tiny helper library for [Zod](https://zod.dev) to safely normalize values to valid types with flexible handling of `null`, `undefined`, and fallback values.
 Supports strings, numbers, booleans, ISO dates, enums, and arrays.
 
+It is very important to validate data coming from the server on the client side, making it more resilient to various errors, including critical ones.
+
 ## Table of Contents
 
 - [Features](#features)
@@ -14,6 +16,8 @@ Supports strings, numbers, booleans, ISO dates, enums, and arrays.
   - [toValidEnum](#tovalidenum)
   - [toValidBoolean](#tovalidboolean)
   - [toValidArray](#tovalidarray)
+- [Utils](#utils)
+  - [nonnulable](#nonnulable)
 - [Examples](#examples)
 - [License](#license)
 
@@ -394,6 +398,56 @@ schema.parse(undefined);  // undefined
 const schema = toValidArray({ type: z.number(), allow: "nullable", fallback: [], preserve: false });
 schema.parse(null);       // null
 schema.parse("oops");     // null
+```
+
+## Utils
+
+### nonnulable
+
+You can remove `null` and `undefined` from the result of an API call using the `nonnulable` utility. This utility adds a `z.transform` to the schema, removing `null` and `undefined` from the type and returning a custom error.
+
+Options:
+- schema – a Zod schema
+- message – error message text (optional)
+
+Examples:
+```ts
+import z from "zod";
+import { toValidString, toValidNumber } from "zod-valid";
+import { nonnulable } from "zod-valid/utils";
+
+const emailSchema = z.object({
+  id: toValidNumber({ allow: "none", preserve: false }),
+  name: toValidString(),
+  surname: toValidString(),
+  address: toValidString(),
+});
+
+/*
+  {
+    id: number;
+    name?: string | null | undefined;
+    surname?: string | null | undefined;
+    address?: string | null | undefined;
+  }
+*/
+type Email = z.infer<typeof emailSchema>;
+
+const formSchema = z.object({
+  name: nonnulable(emailSchema.shape.name).refine((v) => v, "Name is required"),
+  surname: emailSchema.shape.name.nonoptional(),
+  address: nonnulable(emailSchema.shape.name).optional(),
+});
+
+/*
+  {
+    name: string;
+    surname: string | null;
+    address?: string | undefined;
+  }
+*/
+type Form = z.infer<typeof formSchema>;
+
 ```
 
 ## Examples

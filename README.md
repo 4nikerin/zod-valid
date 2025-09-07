@@ -1,7 +1,7 @@
 # zod-valid
 
 A tiny helper library for [Zod](https://zod.dev) to safely normalize values to valid types with flexible handling of `null`, `undefined`, and fallback values.
-Supports strings, numbers, booleans, ISO dates, enums, and arrays.
+Supports strings, numbers, booleans, ISO dates, enums, arrays and objects.
 
 It is very important to validate data coming from the server on the client side, making it more resilient to various errors, including critical ones.
 

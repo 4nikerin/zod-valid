@@ -1,7 +1,7 @@
 {
   "name": "zod-valid",
-  "version": "1.0.5",
-  "description": "Lightweight utilities for flexible Zod schema validation (string, number, array, boolean, enum, ISO).",
+  "version": "1.0.6",
+  "description": "Lightweight utilities for flexible Zod schema validation (string, number, array, object, boolean, enum, ISO).",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +16,8 @@
     "lint": "eslint src tests --ext .ts",
     "lint:fix": "eslint src tests --ext .ts --fix",
     "format": "prettier --write .",
-    "build": "tsup src/index.ts src/utils.ts --format cjs,esm --dts --clean"
+    "build": "tsup src/index.ts src/utils.ts --format cjs,esm --dts --clean",
+    "publish": "npm publish --access public"
   },
   "repository": {
     "type": "git",

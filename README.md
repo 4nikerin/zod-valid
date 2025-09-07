@@ -361,15 +361,18 @@ import {
   toValidISO,
   toValidArray,
   toValidBoolean,
+  toValidObject,
 } from "zod-valid";
 
 const ResponseSchema = toValidArray({
-  type: z.object({
-    id: toValidNumber({ allow: "none", fallback: 0 }),
-    name: toValidString(),
-    email: toValidString({ type: z.email(), fallback: "N/A" }),
-    isActive: toValidBoolean(),
-    createdAt: toValidISO(),
+  type: toValidObject({
+    type: z.object({
+      id: toValidNumber({ allow: "none", fallback: 0 }),
+      name: toValidString(),
+      email: toValidString({ type: z.email(), fallback: "N/A" }),
+      isActive: toValidBoolean(),
+      createdAt: toValidISO(),
+    }),
   }),
   fallback: [],
   preserve: false,

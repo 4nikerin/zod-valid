@@ -1,6 +1,6 @@
 {
   "name": "zod-valid",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Lightweight utilities for flexible Zod schema validation (string, number, array, boolean, enum, ISO).",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -13,8 +13,8 @@
     "test": "vitest",
     "test:types": "tsc --noEmit",
     "test:all": "npm run test:types && npm run test",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "eslint src tests --ext .ts",
+    "lint:fix": "eslint src tests --ext .ts --fix",
     "format": "prettier --write .",
     "build": "tsup src/index.ts src/utils.ts --format cjs,esm --dts --clean"
   },
@@ -49,7 +49,7 @@
     "zod": "^4.0.0"
   },
   "peerDependencies": {
-    "zod": ">=4.1.5"
+    "zod": ">=4.0.0"
   },
   "exports": {
     ".": {

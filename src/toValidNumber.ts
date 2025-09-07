@@ -60,10 +60,10 @@ type ToValidNumberOptions<T extends z.ZodType = z.ZodNumber, K = null> = {
  *   - Otherwise, it is replaced with `fallback`.
  *
  * @param options Behavior options:
- *   - `type` — base Zod schema to apply (default `z.number()`).
- *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
- *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+ *   - `type` — base Zod schema to apply. Default `z.number()`.
+ *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced. Default `null`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that:
  *   - Coerces valid inputs to numbers.
@@ -150,15 +150,11 @@ export function toValidNumber<T extends z.ZodType, K>(options: ToValidNumberOpti
   }
 
   return z.preprocess((val) => {
-    if (allow === "nullish" && val == null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "nullable" && val === null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "optional" && val === undefined) {
+    if (
+      (allow === "nullish" && val == null) ||
+      (allow === "nullable" && val === null) ||
+      (allow === "optional" && val === undefined)
+    ) {
       return preserve ? val : fallback;
     }
 

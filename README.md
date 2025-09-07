@@ -16,6 +16,7 @@ It is very important to validate data coming from the server on the client side,
   - [toValidEnum](#tovalidenum)
   - [toValidBoolean](#tovalidboolean)
   - [toValidArray](#tovalidarray)
+  - [toValidObject](#tovalidobject)
 - [Utils](#utils)
   - [nonnulable](#nonnulable)
 - [Examples](#examples)
@@ -43,41 +44,19 @@ npm install zod-valid zod
 
 ### toValidString
 
-Options to configure the behavior of `toValidString`:
-- `type` - base Zod schema to apply to the input before coercion. Default is `z.string()`.
-- `fallback` - Value to return when the input is invalid or when an allowed empty value (`null`/`undefined`) should be replaced (if `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are allowed:
-  - `"none"` — neither `null` nor `undefined` is allowed.
-  - `"optional"` — only `undefined` is allowed.
-  - `"nullable"` — only `null` is allowed.
-  - `"nullish"` — both `null` and `undefined` are allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values:
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that coerces any value to a string and provides flexible handling of empty values (`null` / `undefined`) and invalid inputs.
 
 Behavior:
-- Converts any input to a string (`String(val)`), unless it is an allowed empty value.
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered as allowed empty value.
-  - `"nullable"` — only `null` is considered as allowed empty value.
-  - `"nullish"` — both `null` and `undefined` are considered as allowed empty values.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other value is coerced to a string using `String(val)`.
+- Converts any non-empty input to a string using String(val).
+- Allowed empty values (null / undefined) are controlled via allow and may be preserved or replaced with fallback.
 
 Behavior options:
-- `type` — base Zod schema to apply (default `z.string()`).
-- `fallback` — value to return when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
-- `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-- `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                                         | Default        | Required |
+|-----------|---------------------------------------------------------------------------------------------------------------------|----------------|----------|
+| `type`    | Base Zod schema to apply.                                                                                           | `z.string()`   | No       |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).                          | `null`         | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`.        | `true`         | No       |
 
 Examples:
 ```ts
@@ -109,45 +88,19 @@ schema.parse(undefined);              // undefined
 
 ### toValidNumber
 
-Options for configuring the behavior of `toValidNumber`:
-- `type` - base Zod schema to apply to the input before coercion. Default is `z.number()`.
-- `fallback` - value to return when the input is invalid or an allowed empty value (`null`/`undefined`) should be replaced (when `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are considered allowed:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values:
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that coerces input values to numbers and provides flexible handling of empty values (`null` / `undefined`) and invalid inputs.
 
 Behavior:
-- Converts valid inputs to numbers using `Number(val)`.
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered an allowed empty value.
-  - `"nullable"` — only `null` is considered an allowed empty value.
-  - `"nullish"` — both `null` and `undefined` are considered allowed empty values.
-
-  Default is `"nullish"`.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other value is converted to a number:
-  - If the result is finite (`Number.isFinite(num)`), it is returned.
-  - Otherwise, it is replaced with `fallback`.
+- Converts values to numbers using Number(val).
+- Non-numeric or invalid values are replaced with fallback depending on allow and preserve.
 
 Behavior options:
-  - `type` — base Zod schema to apply (default `z.number()`).
-  - `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
-  - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-  - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                                         | Default        | Required |
+|-----------|---------------------------------------------------------------------------------------------------------------------|----------------|----------|
+| `type`    | Base Zod schema to apply.                                                                                           | `z.number()`   | No       |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).                          | `null`         | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`.        | `true`         | No       |
 
 Examples:
 ```ts
@@ -174,43 +127,19 @@ schema.parse(undefined); // 99
 
 ### toValidISO
 
-Options for configuring the behavior of `toValidISO`:
-- `type` - base Zod schema to apply to the input before coercion. Default is `z.iso.datetime()`.
-- `fallback` - value to return when the input is invalid or an allowed empty value (`null`/`undefined`) should be replaced (when `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are considered allowed:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values:
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that coerces input to ISO 8601 date strings and provides flexible handling of empty values (`null` / `undefined`) and invalid inputs.
 
 Behavior:
-- Converts valid string inputs to ISO 8601 format (`YYYY-MM-DDTHH:mm:ssZ`).
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered an allowed empty value.
-  - `"nullable"` — only `null` is considered an allowed empty value.
-  - `"nullish"` — both `null` and `undefined` are considered allowed empty values.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other value is processed:
-  - Strings are parsed as dates. Invalid dates return `fallback`.
-  - Non-strings return `fallback`.
+- Converts valid string inputs to ISO 8601 dates.
+- Non-string or invalid values are replaced with fallback depending on allow and preserve.
 
 Behavior options:
-  - `type` — base Zod schema to apply (default `z.iso.datetime()`).
-  - `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
-  - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-  - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                                         | Default             | Required |
+|-----------|---------------------------------------------------------------------------------------------------------------------|--------------------|----------|
+| `type`    | Base Zod schema to apply.                                                                                           | `z.iso.datetime()` | No       |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).                          | `null`             | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`        | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`.        | `true`             | No       |
 
 Examples:
 ```ts
@@ -231,41 +160,19 @@ schema.parse("invalid");           // "1970-01-01T00:00:00Z"
 
 ### toValidEnum
 
-Options for configuring the behavior of `toValidEnum`:
-- `type` - enum values to validate against. Must be a non-empty object with string or number values.
-- `fallback` - value to return when the input is invalid or an allowed empty value (`null`/`undefined`) should be replaced (when `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are considered allowed:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values:
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that validates values against a given enum and provides flexible handling of empty values (`null` / `undefined`) and invalid inputs.
 
 Behavior:
-- Validates input against the provided enum (`type`).
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered an allowed empty value.
-  - `"nullable"` — only `null` is considered an allowed empty value.
-  - `"nullish"` — both `null` and `undefined` are considered allowed empty values.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other value not in the enum returns `fallback`.
+- Validates input against the provided enum (type).
+- Non-enum or invalid values are replaced with fallback depending on allow and preserve.
 
 Behavior options:
-- `type` — enum values to validate against.
-- `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
-- `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-- `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                                         | Default        | Required |
+|-----------|---------------------------------------------------------------------------------------------------------------------|----------------|----------|
+| `type`    | Enum values to validate against.                                                                                   | —              | Yes      |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).                          | `null`         | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`.        | `true`         | No       |
 
 Examples:
 ```ts
@@ -287,43 +194,20 @@ schema.parse(null);       // null
 
 ### toValidBoolean
 
-Options for configuring the behavior of `toValidBoolean`:
-- `type` - base Zod schema to apply to the input before coercion. Default is `z.boolean()`.
-- `fallback` - value to return when the input is invalid or an allowed empty value (`null`/`undefined`) should be replaced (when `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are considered allowed:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that coerces input to boolean values and provides flexible handling of empty values (`null` / `undefined`) and invalid inputs.
 
 Behavior:
-- Converts strings like `"true"`/`"false"` to boolean.
-- Converts numbers to boolean (`0` → `false`, others → `true`).
-- Objects with keys are treated as `true`, empty objects as `false`.
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered an allowed empty value.
-  - `"nullable"` — only `null` is considered an allowed empty value.
-  - `"nullish"` — both `null` and `undefined` are considered allowed empty values.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other invalid value is coerced to boolean following the rules above.
+- Converts values to boolean ("true"/"false", numbers, objects).
+- Allowed empty values (null / undefined) are controlled via allow and may be preserved or replaced.
+- Other invalid values are coerced to boolean following the above rules.
 
 Behavior options:
-- `type` — base Zod schema to apply (default `z.boolean()`).
-- `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
-- `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-- `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                                         | Default        | Required |
+|-----------|---------------------------------------------------------------------------------------------------------------------|----------------|----------|
+| `type`    | Base Zod schema to apply.                                                                                           | `z.boolean()`  | No       |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).                          | `null`         | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`.        | `true`         | No       |
 
 Examples:
 ```ts
@@ -347,41 +231,20 @@ schema.parse("invalid");   // true (invalid → fallback)
 
 ### toValidArray
 
-Options for configuring the behavior of `toValidArray`:
-- `type` - base Zod schema for the array elements.
-- `fallback` - value to return when the input is invalid or an allowed empty value (`null`/`undefined`) should be replaced (when `preserve: false`). Default is `null`.
-- `allow` - controls which "empty" values are considered allowed:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-
-  Default is `"nullish"`.
-- `preserve` - determines what happens with allowed empty values:
-  - `true`  — returns the empty value (`null` or `undefined`) as-is.
-  - `false` — replaces the empty value with `fallback`.
-
-  Default is `true`.
-
 Creates a Zod schema that ensures input is an array of elements matching `type`, with flexible handling of empty (`null`/`undefined`) and invalid values.
 
 Behavior:
-- If input is not an array and not an allowed empty value, it is replaced with `fallback`.
-- Controls which "empty" values are allowed using the `allow` option:
-  - `"none"` — neither `null` nor `undefined` are allowed.
-  - `"optional"` — only `undefined` is considered allowed.
-  - `"nullable"` — only `null` is considered allowed.
-  - `"nullish"` — both `null` and `undefined` are considered allowed.
-- If an empty value is allowed:
-  - `preserve: true` — returns the empty value as-is.
-  - `preserve: false` — replaces the empty value with `fallback`.
-- Any other invalid value (non-array) is replaced with `fallback`.
+- If input is not an array or is an invalid value, it is replaced with fallback (depending on allow and preserve).
+- Allowed empty values (null / undefined) are controlled via allow and may be preserved or replaced.
 
 Behavior options:
-  - `type` — Zod schema for array elements.
-  - `fallback` — value returned instead of invalid input or replaced empty value (`preserve: false`; default `null`).
-  - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
-  - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+| Option    | Description                                                                                               | Default        | Required |
+|-----------|-----------------------------------------------------------------------------------------------------------|----------------|----------|
+| `type`    | Zod schema for array elements.                                                                           | —              | Yes      |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).               | `null`         | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`. | `true`         | No       |
+
 
 Examples:
 ```ts
@@ -400,15 +263,51 @@ schema.parse(null);       // null
 schema.parse("oops");     // null
 ```
 
+### toValidObject
+
+Creates a Zod schema that ensures the input is a plain object (validated by `type`), with flexible handling of empty values (`null` / `undefined`) and a fallback value for invalid cases.
+
+Behavior:
+- If the input is a plain object ({}), it is validated against type.
+- Non-object or invalid values are replaced with fallback depending on allow and preserve.
+
+Behavior options:
+| Option    | Description                                                                                  | Default                                | Required |
+|-----------|----------------------------------------------------------------------------------------------|----------------------------------------|----------|
+| `type`    | Base Zod schema for validating objects.                                                      | `z.object({}).catchall(z.any())` (any plain object) | No       |
+| `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).   | `null`                                 | No       |
+| `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"` | No       |
+| `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`. | `true` | No       |
+
+Examples:
+```ts
+import { toValidArray } from "zod-valid";
+
+const schemaNum = toValidObject({ type: z.object({ x: z.number() }) });
+schemaNum.parse({ x: 42 });    // { x: 42 }
+schemaNum.parse({ x: "oops" }); // null (invalid, replaced with fallback)
+
+const schemaOpt = toValidObject({ type: z.object({}), allow: "optional" });
+schemaOpt.parse(undefined); // undefined
+schemaOpt.parse(null);      // null (replaced with fallback, since null not allowed)
+
+const schemaReplace = toValidObject({ type: z.object({}), allow: "nullish", fallback: {}, preserve: false });
+schemaReplace.parse(null);      // {} (null allowed, but replaced with fallback)
+schemaReplace.parse(undefined); // {} (undefined allowed, but replaced with fallback)
+schemaReplace.parse("oops");    // {} (invalid, replaced with fallback)
+```
+
 ## Utils
 
 ### nonnulable
 
 You can remove `null` and `undefined` from the result of an API call using the `nonnulable` utility. This utility adds a `z.transform` to the schema, removing `null` and `undefined` from the type and returning a custom error.
 
-Options:
-- schema – a Zod schema
-- message – error message text (optional)
+Behavior options:
+| Option   | Description        | Default                        | Required |
+|----------|------------------|--------------------------------|----------|
+| `schema` | A Zod schema       | —                              | Yes      |
+| `message`| Error message text | `"Cannot be null or undefined"` | No       |
 
 Examples:
 ```ts

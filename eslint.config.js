@@ -20,6 +20,8 @@ export default [
     rules: {
       ...tseslint.configs.recommended.rules,
       "prettier/prettier": "error",
+      "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

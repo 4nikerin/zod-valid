@@ -33,7 +33,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      |            |         | t:string |", () => {
+  it("|           |            |         | t:string |", () => {
     const schema = toValidEnum({ type: SomeEnum });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<SomeEnum | null | undefined>();
@@ -48,7 +48,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      |            |         | t:number |", () => {
+  it("|           |            |         | t:number |", () => {
     const schema = toValidEnum({ type: someObject });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
@@ -65,7 +65,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      |            | p:true  | t:string |", () => {
+  it("|           |            | p:true  | t:string |", () => {
     const schema = toValidEnum({
       preserve: true,
       type: SomeEnum,
@@ -83,7 +83,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      |            | p:true  | t:number |", () => {
+  it("|           |            | p:true  | t:number |", () => {
     const schema = toValidEnum({
       preserve: true,
       type: someObject,
@@ -103,7 +103,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      |            | p:false | t:string |", () => {
+  it("|           |            | p:false | t:string |", () => {
     const schema = toValidEnum({
       preserve: false,
       type: SomeEnum,
@@ -121,7 +121,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      |            | p:false | t:number |", () => {
+  it("|           |            | p:false | t:number |", () => {
     const schema = toValidEnum({
       preserve: false,
       type: someObject,
@@ -141,7 +141,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:none     |         | t:string |", () => {
+  it("|           | a:none     |         | t:string |", () => {
     const schema = toValidEnum({
       allow: "none",
       type: SomeEnum,
@@ -159,7 +159,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:none     |         | t:number |", () => {
+  it("|           | a:none     |         | t:number |", () => {
     const schema = toValidEnum({
       allow: "none",
       type: someObject,
@@ -179,7 +179,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:none     | p:true  | t:string |", () => {
+  it("|           | a:none     | p:true  | t:string |", () => {
     const schema = toValidEnum({
       allow: "none",
       preserve: true,
@@ -198,7 +198,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:none     | p:true  | t:number |", () => {
+  it("|           | a:none     | p:true  | t:number |", () => {
     const schema = toValidEnum({
       allow: "none",
       preserve: true,
@@ -219,7 +219,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:none     | p:false | t:string |", () => {
+  it("|           | a:none     | p:false | t:string |", () => {
     const schema = toValidEnum({
       allow: "none",
       preserve: false,
@@ -238,7 +238,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:none     | p:false | t:number |", () => {
+  it("|           | a:none     | p:false | t:number |", () => {
     const schema = toValidEnum({
       allow: "none",
       preserve: false,
@@ -259,7 +259,7 @@ describe("toValidEnum", () => {
     expect(() => schema.parse(undefined)).toThrow(z.ZodError);
   });
 
-  it("|      | a:optional |         | t:string |", () => {
+  it("|           | a:optional |         | t:string |", () => {
     const schema = toValidEnum({
       allow: "optional",
       type: SomeEnum,
@@ -277,7 +277,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      | a:optional |         | t:number |", () => {
+  it("|           | a:optional |         | t:number |", () => {
     const schema = toValidEnum({
       allow: "optional",
       type: someObject,
@@ -297,7 +297,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      | a:optional | p:true  | t:string |", () => {
+  it("|           | a:optional | p:true  | t:string |", () => {
     const schema = toValidEnum({
       allow: "optional",
       preserve: true,
@@ -316,7 +316,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      | a:optional | p:true  | t:number |", () => {
+  it("|           | a:optional | p:true  | t:number |", () => {
     const schema = toValidEnum({
       allow: "optional",
       preserve: true,
@@ -337,7 +337,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("|      | a:optional | p:false | t:string |", () => {
+  it("|           | a:optional | p:false | t:string |", () => {
     const schema = toValidEnum({
       allow: "optional",
       preserve: false,
@@ -356,7 +356,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:optional | p:false | t:number |", () => {
+  it("|           | a:optional | p:false | t:number |", () => {
     const schema = toValidEnum({
       allow: "optional",
       preserve: false,
@@ -377,7 +377,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable |         | t:string |", () => {
+  it("|           | a:nullable |         | t:string |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       type: SomeEnum,
@@ -395,7 +395,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable |         | t:number |", () => {
+  it("|           | a:nullable |         | t:number |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       type: someObject,
@@ -415,7 +415,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable | p:true  | t:string |", () => {
+  it("|           | a:nullable | p:true  | t:string |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       preserve: true,
@@ -434,7 +434,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable | p:true  | t:number |", () => {
+  it("|           | a:nullable | p:true  | t:number |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       preserve: true,
@@ -455,7 +455,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable | p:false | t:string |", () => {
+  it("|           | a:nullable | p:false | t:string |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       preserve: false,
@@ -474,7 +474,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("|      | a:nullable | p:false | t:number |", () => {
+  it("|           | a:nullable | p:false | t:number |", () => {
     const schema = toValidEnum({
       allow: "nullable",
       preserve: false,
@@ -495,7 +495,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(null);
   });
 
-  it("| f:[] |            |         | t:string |", () => {
+  it("| f:invalid |            |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       type: SomeEnum,
@@ -513,7 +513,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] |            |         | t:number |", () => {
+  it("| f:invalid |            |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       type: someObject,
@@ -533,7 +533,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] |            | p:true  | t:string |", () => {
+  it("| f:invalid |            | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       preserve: true,
@@ -552,7 +552,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] |            | p:true  | t:number |", () => {
+  it("| f:invalid |            | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       preserve: true,
@@ -573,7 +573,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] |            | p:false | t:string |", () => {
+  it("| f:invalid |            | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       preserve: false,
@@ -592,7 +592,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] |            | p:false | t:number |", () => {
+  it("| f:invalid |            | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       preserve: false,
@@ -613,7 +613,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     |         | t:string |", () => {
+  it("| f:invalid | a:none     |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -632,7 +632,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     |         | t:number |", () => {
+  it("| f:invalid | a:none     |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -653,7 +653,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     | p:true  | t:string |", () => {
+  it("| f:invalid | a:none     | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -673,7 +673,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     | p:true  | t:number |", () => {
+  it("| f:invalid | a:none     | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -695,7 +695,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     | p:false | t:string |", () => {
+  it("| f:invalid | a:none     | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -715,7 +715,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:none     | p:false | t:number |", () => {
+  it("| f:invalid | a:none     | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "none",
@@ -737,7 +737,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:optional |         | t:string |", () => {
+  it("| f:invalid | a:optional |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -756,7 +756,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] | a:optional |         | t:number |", () => {
+  it("| f:invalid | a:optional |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -777,7 +777,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] | a:optional | p:true  | t:string |", () => {
+  it("| f:invalid | a:optional | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -797,7 +797,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] | a:optional | p:true  | t:number |", () => {
+  it("| f:invalid | a:optional | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -819,7 +819,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:[] | a:optional | p:false | t:string |", () => {
+  it("| f:invalid | a:optional | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -839,7 +839,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:optional | p:false | t:number |", () => {
+  it("| f:invalid | a:optional | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "optional",
@@ -859,7 +859,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable |         | t:string |", () => {
+  it("| f:invalid | a:nullable |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -878,7 +878,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable |         | t:number |", () => {
+  it("| f:invalid | a:nullable |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -899,7 +899,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable | p:true  | t:string |", () => {
+  it("| f:invalid | a:nullable | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -919,7 +919,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable | p:true  | t:number |", () => {
+  it("| f:invalid | a:nullable | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -941,7 +941,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable | p:false | t:string |", () => {
+  it("| f:invalid | a:nullable | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -961,7 +961,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:[] | a:nullable | p:false | t:number |", () => {
+  it("| f:invalid | a:nullable | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: "invalid",
       allow: "nullable",
@@ -983,7 +983,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe("invalid");
   });
 
-  it("| f:12 |            |         | t:string |", () => {
+  it("| f:12      |            |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       type: SomeEnum,
@@ -1001,7 +1001,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 |            |         | t:number |", () => {
+  it("| f:12      |            |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       type: someObject,
@@ -1021,7 +1021,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 |            | p:true  | t:string |", () => {
+  it("| f:12      |            | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       preserve: true,
@@ -1040,7 +1040,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 |            | p:true  | t:number |", () => {
+  it("| f:12      |            | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       preserve: true,
@@ -1061,7 +1061,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 |            | p:false | t:string |", () => {
+  it("| f:12      |            | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       preserve: false,
@@ -1080,7 +1080,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 |            | p:false | t:number |", () => {
+  it("| f:12      |            | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       preserve: false,
@@ -1101,7 +1101,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     |         | t:string |", () => {
+  it("| f:12      | a:none     |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1120,7 +1120,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     |         | t:number |", () => {
+  it("| f:12      | a:none     |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1141,7 +1141,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     | p:true  | t:string |", () => {
+  it("| f:12      | a:none     | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1161,7 +1161,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     | p:true  | t:number |", () => {
+  it("| f:12      | a:none     | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1183,7 +1183,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     | p:false | t:string |", () => {
+  it("| f:12      | a:none     | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1203,7 +1203,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:none     | p:false | t:number |", () => {
+  it("| f:12      | a:none     | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "none",
@@ -1225,7 +1225,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:optional |         | t:string |", () => {
+  it("| f:12      | a:optional |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1244,7 +1244,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 | a:optional |         | t:number |", () => {
+  it("| f:12      | a:optional |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1265,7 +1265,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 | a:optional | p:true  | t:string |", () => {
+  it("| f:12      | a:optional | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1285,7 +1285,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 | a:optional | p:true  | t:number |", () => {
+  it("| f:12      | a:optional | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1307,7 +1307,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
-  it("| f:12 | a:optional | p:false | t:string |", () => {
+  it("| f:12      | a:optional | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1327,7 +1327,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:optional | p:false | t:number |", () => {
+  it("| f:12      | a:optional | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "optional",
@@ -1349,7 +1349,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable |         | t:string |", () => {
+  it("| f:12      | a:nullable |         | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",
@@ -1368,7 +1368,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable |         | t:number |", () => {
+  it("| f:12      | a:nullable |         | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",
@@ -1389,7 +1389,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable | p:true  | t:string |", () => {
+  it("| f:12      | a:nullable | p:true  | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",
@@ -1409,7 +1409,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable | p:true  | t:number |", () => {
+  it("| f:12      | a:nullable | p:true  | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",
@@ -1431,7 +1431,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable | p:false | t:string |", () => {
+  it("| f:12      | a:nullable | p:false | t:string |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",
@@ -1451,7 +1451,7 @@ describe("toValidEnum", () => {
     expect(schema.parse(undefined)).toBe(12);
   });
 
-  it("| f:12 | a:nullable | p:false | t:number |", () => {
+  it("| f:12      | a:nullable | p:false | t:number |", () => {
     const schema = toValidEnum({
       fallback: 12,
       allow: "nullable",

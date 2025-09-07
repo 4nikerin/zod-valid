@@ -57,9 +57,9 @@ type ToValidArrayOptions<T extends z.ZodType, K = null> = {
  *
  * @param options Behavior options:
  *   - `type` — Zod schema for array elements.
- *   - `fallback` — value returned instead of invalid input or replaced empty value (`preserve: false`; default `null`).
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
- *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+ *   - `fallback` — value returned instead of invalid input or replaced empty value. Default `null`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
+ *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that validates arrays and applies the described rules.
  *
@@ -149,15 +149,11 @@ export function toValidArray<T extends z.ZodType, K>(options: ToValidArrayOption
   }
 
   return z.preprocess((val) => {
-    if (allow === "nullish" && val == null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "nullable" && val === null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "optional" && val === undefined) {
+    if (
+      (allow === "nullish" && val == null) ||
+      (allow === "nullable" && val === null) ||
+      (allow === "optional" && val === undefined)
+    ) {
       return preserve ? val : fallback;
     }
 

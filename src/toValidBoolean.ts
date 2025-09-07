@@ -60,10 +60,10 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  * - Any other invalid value is coerced to boolean following the rules above.
  *
  * @param options Behavior options:
- *   - `type` — base Zod schema to apply (default `z.boolean()`).
- *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced (`preserve: false`; default `null`).
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`; default `"nullish"`).
- *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback` (`false`; default `true`).
+ *   - `type` — base Zod schema to apply. Default `z.boolean()`.
+ *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced. Default `null`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that:
  *   - Coerces valid inputs to boolean.
@@ -130,15 +130,11 @@ export function toValidBoolean<T extends z.ZodType, K>(options: ToValidBooleanOp
   }
 
   return z.preprocess((val) => {
-    if (allow === "nullish" && val == null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "nullable" && val === null) {
-      return preserve ? val : fallback;
-    }
-
-    if (allow === "optional" && val === undefined) {
+    if (
+      (allow === "nullish" && val == null) ||
+      (allow === "nullable" && val === null) ||
+      (allow === "optional" && val === undefined)
+    ) {
       return preserve ? val : fallback;
     }
 

@@ -1,4 +1,16 @@
-# zod-valid
+<p align="center">
+  <h1 align="center">zod-valid</h1>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/zod-valid">
+    <img src="https://img.shields.io/npm/v/zod-valid.svg" alt="npm version"/>
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"/>
+  </a>
+</p>
+
 
 A tiny helper library for [Zod](https://zod.dev) to safely normalize values to valid types with flexible handling of `null`, `undefined`, and fallback values.
 Supports strings, numbers, booleans, ISO dates, enums, arrays and objects.

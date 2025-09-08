@@ -233,20 +233,23 @@ schema.parse("invalid");   // true (invalid → fallback)
 
 Creates a Zod schema that ensures input is an array of elements matching `type`, with flexible handling of empty (`null`/`undefined`) and invalid values.
 
-Behavior:
-- If input is not an array or is an invalid value, it is replaced with fallback (depending on allow and preserve).
-- Allowed empty values (null / undefined) are controlled via allow and may be preserved or replaced.
+**Behavior:**
+- If input is not an array or is an invalid value, it is replaced with `fallback` (depending on `allow` and `preserve`).
+- Allowed empty values (`null` / `undefined`) are controlled via `allow` and may be preserved or replaced.
+- If `strict: true`, removes any elements that do **not** pass the `type` schema (invalid elements), as well as `null` and `undefined`, **but does not remove fallback values** if they are not `null` or `undefined`.
 
-Behavior options:
+**Behavior options:**
+
 | Option    | Description                                                                                               | Default        | Required |
 |-----------|-----------------------------------------------------------------------------------------------------------|----------------|----------|
 | `type`    | Zod schema for array elements.                                                                           | —              | Yes      |
 | `fallback`| Value returned instead of invalid input or when replacing empty input (`preserve: false`).               | `null`         | No       |
 | `allow`   | Defines which empty values are considered valid:<br>- `"none"` — neither `null` nor `undefined` allowed.<br>- `"optional"` — only `undefined` allowed.<br>- `"nullable"` — only `null` allowed.<br>- `"nullish"` — both `null` and `undefined` allowed. | `"nullish"`    | No       |
 | `preserve`| Behavior for allowed empty values:<br>- `true` — return them as-is.<br>- `false` — replace with `fallback`. | `true`         | No       |
+| `strict`  | Whether to strictly enforce the element schema:<br>- `true` — removes any elements that do **not** pass the `type` schema (invalid elements).<br>Also removes `null` and `undefined` values, even if allowed by `allow`.<br>**Does not remove fallback values** if they are not `null` or `undefined`.<br>- `false` — invalid elements and allowed empty values are preserved (or replaced by `fallback` if `preserve: false`). | `false`        | No       |
 
+**Examples:**
 
-Examples:
 ```ts
 import { toValidArray } from "zod-valid";
 
@@ -254,13 +257,16 @@ const schema = toValidArray(z.string());
 schema.parse(["a", "b"]); // ["a", "b"]
 schema.parse(null);       // null (default allow="nullish", preserve=true)
 
-const schema = toValidArray({ type: z.coerce.number(), allow: "optional" });
-schema.parse(null);       // null
-schema.parse(undefined);  // undefined
+const schema2 = toValidArray({ type: z.coerce.number(), allow: "optional" });
+schema2.parse(null);       // null
+schema2.parse(undefined);  // undefined
 
-const schema = toValidArray({ type: z.number(), allow: "nullable", fallback: [], preserve: false });
-schema.parse(null);       // null
-schema.parse("oops");     // null
+const schema3 = toValidArray({ type: z.number(), allow: "nullable", fallback: [], preserve: false });
+schema3.parse(null);       // null
+schema3.parse("oops");     // null
+
+const strictSchema = toValidArray({ type: z.number(), strict: true });
+strictSchema.parse([1, "x", 2, null]); // [1, 2] — removes invalid values, null, and undefined; preserves fallback values
 ```
 
 ### toValidObject
@@ -369,14 +375,26 @@ const ResponseSchema = toValidArray({
     type: z.object({
       id: toValidNumber({ allow: "none", fallback: 0 }),
       name: toValidString(),
-      email: toValidString({ type: z.email(), fallback: "N/A" }),
+      email: toValidString({ type: z.email(), fallback: "N/A", preserve: false }),
       isActive: toValidBoolean(),
       createdAt: toValidISO(),
     }),
   }),
   fallback: [],
   preserve: false,
+  strict: true,
 });
+
+/*
+  type ResponseType = {
+    id: number;
+    name?: string | null | undefined;
+    email: string;
+    isActive?: boolean | null | undefined;
+    createdAt?: string | null | undefined;
+  }[]
+*/
+type ResponseType = z.infer<typeof ResponseSchema>
 
 async function getUser() {
   const response = await fetch("/api/users", {

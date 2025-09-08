@@ -5,7 +5,7 @@ type ToValidObjectAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidObject`.
  */
-type ToValidObjectOptions<T extends z.ZodObject<z.ZodRawShape>, K = null> = {
+type ToValidObjectOptions<T extends z.ZodObject, K = null> = {
   /**
    * Base Zod schema used to validate plain objects.
    *
@@ -111,32 +111,30 @@ type ToValidObjectOptions<T extends z.ZodObject<z.ZodRawShape>, K = null> = {
  * schemaStrict.parse({ id: 123 });   // null (invalid, fallback applied)
  */
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K = null>(
+export function toValidObject<T extends z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform,
   T | (K extends never[] ? T : K extends null | undefined ? T : z.ZodType<K>)
 >;
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K = null>(
+export function toValidObject<T extends z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform, T | z.ZodType<K>>;
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K = null>(
+export function toValidObject<T extends z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodUnion<[T, z.ZodCustom<K, K>]>>>;
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K = null>(
+export function toValidObject<T extends z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>>;
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K = null>(
+export function toValidObject<T extends z.ZodObject, K = null>(
   options?: ToValidObjectOptions<T, K>,
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>>>;
 
-export function toValidObject<T extends z.ZodObject<z.ZodRawShape>, K>(
-  options: ToValidObjectOptions<T, K> = {},
-) {
+export function toValidObject<T extends z.ZodObject, K>(options: ToValidObjectOptions<T, K> = {}) {
   const {
     type = z.object({}).catchall(z.any()),
     fallback = null,

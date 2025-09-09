@@ -382,45 +382,43 @@ import {
   toValidObject,
 } from "zod-valid";
 
-const ResponseSchema = toValidArray({
-  type: toValidObject({
-    type: z.object({
-      id: toValidNumber({ allow: "none", fallback: 0 }),
-      name: toValidString(),
-      email: toValidString({ type: z.email(), fallback: "N/A", preserve: false }),
-      isActive: toValidBoolean(),
-      createdAt: toValidISO(),
-    }),
+const ResponseSchema = toValidObject({
+  type: z.object({
+    users: toValidArray({
+      type: toValidObject({
+        type: z.object({
+          id: toValidNumber({ allow: "none" }),
+          name: toValidString(),
+          email: toValidString({ type: z.email(), fallback: "N/A", preserve: false }),
+          isActive: toValidBoolean(),
+          createdAt: toValidISO(),
+        }),
+      }),
+      fallback: [],
+      preserve: false,
+      strict: true,
+    })
   }),
-  fallback: [],
-  preserve: false,
-  strict: true,
 });
 
 /*
   type ResponseType = {
-    id: number;
-    name?: string | null | undefined;
-    email: string;
-    isActive?: boolean | null | undefined;
-    createdAt?: string | null | undefined;
-  }[]
+    users: {
+      id: number;
+      name?: string | null | undefined;
+      email: string;
+      isActive?: boolean | null | undefined;
+      createdAt?: string | null | undefined;
+    }[]
+  } | null | undefined
 */
 type ResponseType = z.infer<typeof ResponseSchema>
 
 async function getUser() {
-  const response = await fetch("/api/users", {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  });
-
+  const response = await fetch("/api/users");
   const rawData = await response.json();
   const validData = ResponseSchema.parse(rawData);
-
-  return validData.filter((user) => user.id > 0);
+  return validData;
 }
 ```
 

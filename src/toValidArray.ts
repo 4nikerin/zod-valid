@@ -5,7 +5,7 @@ type ToValidArrayAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidArray`
  */
-type ToValidArrayOptions<T extends z.ZodType, K = null, S extends boolean = false> = {
+type ToValidArrayOptions<T extends z.ZodType, K = [], S extends boolean = true> = {
   /**
    * Base Zod schema for the array elements.
    */
@@ -69,7 +69,7 @@ type ToValidArrayOptions<T extends z.ZodType, K = null, S extends boolean = fals
  *   - invalid elements are removed.
  *   - `null` and `undefined` are removed regardless of `allow`.
  *   - fallback values are preserved (if they are not `null`/`undefined`).
- * - If `strict: false` (default):
+ * - If `strict: false`:
  *   - invalid elements are kept as-is (or replaced by `fallback` if `preserve: false`).
  *
  * @param typeOrOptions Either:
@@ -81,7 +81,7 @@ type ToValidArrayOptions<T extends z.ZodType, K = null, S extends boolean = fals
  *   - `fallback` — value returned instead of invalid input or replaced empty value. Default `null`.
  *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
  *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
- *   - `strict` — whether to strictly enforce element schema (`true` removes invalid items). Default `false`.
+ *   - `strict` — whether to strictly enforce element schema (`true` removes invalid items). Default `true`.
  *
  * @returns A ZodPipe schema that validates arrays and applies the described rules.
  *
@@ -109,7 +109,7 @@ type ToValidArrayOptions<T extends z.ZodType, K = null, S extends boolean = fals
  * strictSchema.parse([1, "x", 2, null, undefined]); // [1, 2]
  */
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "none" },
 ): z.ZodPipe<
@@ -122,7 +122,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
         : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform,
@@ -134,7 +134,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
         : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { preserve: false },
 ): z.ZodPipe<
@@ -145,7 +145,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { preserve: false },
 ): z.ZodPipe<
   z.ZodTransform,
@@ -155,7 +155,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
@@ -169,7 +169,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "optional" },
 ): z.ZodPipe<
   z.ZodTransform,
@@ -182,7 +182,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
@@ -196,7 +196,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "nullable" },
 ): z.ZodPipe<
   z.ZodTransform,
@@ -209,7 +209,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   type: T,
   options?: Omit<ToValidArrayOptions<T, K, S>, "type">,
 ): z.ZodPipe<
@@ -227,7 +227,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = null, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options?: ToValidArrayOptions<T, K, S>,
 ): z.ZodPipe<
   z.ZodTransform,
@@ -244,7 +244,7 @@ export function toValidArray<T extends z.ZodType, K = null, S extends boolean = 
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K, S extends boolean = false>(
+export function toValidArray<T extends z.ZodType, K, S extends boolean = true>(
   arg1: T | ToValidArrayOptions<T, K, S> = {},
   arg2: ToValidArrayOptions<T, K, S> = {},
 ) {
@@ -253,7 +253,7 @@ export function toValidArray<T extends z.ZodType, K, S extends boolean = false>(
   const { fallback = [], allow = "nullish", preserve = true, strict = true } = options;
   //   options: ToValidArrayOptions<T, K, S>,
   // ) {
-  //   const { type, fallback = null, allow = "nullish", preserve = true, strict } = options;
+  //   const { type, fallback = [], allow = "nullish", preserve = true, strict } = options;
 
   const baseSchema = z.array(type);
   const isEmptyArray = Array.isArray(fallback) && fallback.length === 0;

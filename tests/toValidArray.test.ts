@@ -7,7 +7,7 @@ describe("toValidArray", () => {
   it("without params", () => {
     const schema = toValidArray();
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<unknown[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<{}[] | null | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -25,7 +25,7 @@ describe("toValidArray", () => {
   it("empty params", () => {
     const schema = toValidArray({});
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<unknown[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<{}[] | null | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -193,13 +193,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
       | undefined
     >();
@@ -433,13 +429,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
       | undefined
     >();
@@ -531,7 +523,7 @@ describe("toValidArray", () => {
       type: z.coerce.string(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -556,7 +548,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -581,7 +573,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -605,7 +597,7 @@ describe("toValidArray", () => {
       type: z.coerce.number(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -627,7 +619,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -649,7 +641,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -675,14 +667,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -710,10 +697,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | {
-          value: number;
-        }[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -741,14 +727,13 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      (
+        | {
+            value: number;
+          }
+        | null
+        | undefined
+      )[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -914,13 +899,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -1157,13 +1138,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -1402,13 +1379,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -1496,7 +1469,7 @@ describe("toValidArray", () => {
       type: z.coerce.string(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1521,7 +1494,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1546,7 +1519,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1570,7 +1543,7 @@ describe("toValidArray", () => {
       type: z.coerce.number(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1592,7 +1565,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1614,7 +1587,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1640,14 +1613,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      | {
+          value: number;
+        }[]
       | undefined
     >();
 
@@ -1679,7 +1647,6 @@ describe("toValidArray", () => {
       | {
           value: number;
         }[]
-      | null
       | undefined
     >();
 
@@ -1715,7 +1682,6 @@ describe("toValidArray", () => {
           | null
           | undefined
         )[]
-      | null
       | undefined
     >();
 
@@ -1739,7 +1705,7 @@ describe("toValidArray", () => {
       type: z.coerce.string(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1765,7 +1731,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1791,7 +1757,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1816,7 +1782,7 @@ describe("toValidArray", () => {
       type: z.coerce.number(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1839,7 +1805,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1862,7 +1828,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | undefined>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -1889,14 +1855,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      | {
+          value: number;
+        }[]
       | undefined
     >();
 
@@ -1929,7 +1890,6 @@ describe("toValidArray", () => {
       | {
           value: number;
         }[]
-      | null
       | undefined
     >();
 
@@ -1966,7 +1926,6 @@ describe("toValidArray", () => {
           | null
           | undefined
         )[]
-      | null
       | undefined
     >();
 
@@ -1990,7 +1949,7 @@ describe("toValidArray", () => {
       type: z.coerce.string(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2016,7 +1975,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2042,7 +2001,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2067,7 +2026,7 @@ describe("toValidArray", () => {
       type: z.coerce.number(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2090,7 +2049,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2113,7 +2072,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2140,14 +2099,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -2176,10 +2130,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | {
-          value: number;
-        }[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -2208,14 +2161,13 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      (
+        | {
+            value: number;
+          }
+        | null
+        | undefined
+      )[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -2381,13 +2333,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
     >();
 
@@ -2627,13 +2575,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
     >();
 
@@ -2725,7 +2669,7 @@ describe("toValidArray", () => {
       type: z.coerce.string(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2751,7 +2695,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2777,7 +2721,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2802,7 +2746,7 @@ describe("toValidArray", () => {
       type: z.coerce.number(),
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2825,7 +2769,7 @@ describe("toValidArray", () => {
       strict: true,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2848,7 +2792,7 @@ describe("toValidArray", () => {
       strict: false,
     });
 
-    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
@@ -2875,14 +2819,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -2911,10 +2850,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | {
-          value: number;
-        }[]
-      | null
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -2943,14 +2881,13 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
-      | null
+      (
+        | {
+            value: number;
+          }
+        | null
+        | undefined
+      )[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -3116,13 +3053,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
       | undefined
     >();
@@ -3365,13 +3298,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
       | undefined
     >();
@@ -3616,13 +3545,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -3862,13 +3787,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -4116,13 +4037,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -4370,13 +4287,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -4617,13 +4530,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | undefined
     >();
 
@@ -4869,13 +4778,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | undefined
     >();
 
@@ -5126,13 +5031,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -5373,13 +5274,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
     >();
 
@@ -5628,13 +5525,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | null
     >();
 
@@ -5885,13 +5778,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      (
-        | {
-            value: number;
-          }
-        | null
-        | undefined
-      )[]
+      {
+        value: number;
+      }[]
     >();
 
     expect(schema.parse("value")).toStrictEqual([]);
@@ -6125,13 +6014,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | null
       | undefined
@@ -6377,13 +6262,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | null
       | undefined
@@ -6631,13 +6512,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 
@@ -6879,13 +6756,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 
@@ -7134,13 +7007,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 
@@ -7391,13 +7260,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 
@@ -7641,13 +7506,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | undefined
     >();
@@ -7899,13 +7760,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | undefined
     >();
@@ -8159,13 +8016,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 
@@ -8409,13 +8262,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | null
     >();
@@ -8667,13 +8516,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
       | null
     >();
@@ -8927,13 +8772,9 @@ describe("toValidArray", () => {
     });
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<
-      | (
-          | {
-              value: number;
-            }
-          | null
-          | undefined
-        )[]
+      | {
+          value: number;
+        }[]
       | number
     >();
 

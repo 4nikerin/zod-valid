@@ -59,10 +59,14 @@ type ToValidNumberOptions<T extends z.ZodType = z.ZodNumber, K = null> = {
  *   - If the result is finite (`Number.isFinite(num)`), it is returned.
  *   - Otherwise, it is replaced with `fallback`.
  *
- * @param options Behavior options:
+ * @param typeOrOptions Either:
+ *   - A base Zod schema to apply (`z.ZodNumber` or other `z.ZodType`), **or**
+ *   - An options object (see below).
+ *
+ * @param [options] Behavior options (if `type` is passed as first argument):
  *   - `type` — base Zod schema to apply. Default `z.number()`.
  *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced. Default `null`.
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
  *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that:
@@ -70,27 +74,43 @@ type ToValidNumberOptions<T extends z.ZodType = z.ZodNumber, K = null> = {
  *   - Optionally wraps with `.optional()`, `.nullable()`, or `.nullish()` based on `allow`.
  *
  * @example
+ * // Default usage
  * const schema = toValidNumber();
  * schema.parse(42);        // 42
  * schema.parse("123");     // 123
- * schema.parse(null);      // null (default allow="nullish", preserve=true)
+ * schema.parse(null);      // null (allow="nullish", preserve=true)
  *
  * @example
- * const schema = toValidNumber({ allow: "optional" });
- * schema.parse(null);      // null replaced with "null" logic → returns fallback if preserve=false
- * schema.parse(undefined); // undefined
+ * // Passing options only
+ * const schemaOpt = toValidNumber({ allow: "optional" });
+ * schemaOpt.parse(null);      // null → fallback if preserve=false
+ * schemaOpt.parse(undefined); // undefined
  *
  * @example
- * const schema = toValidNumber({ allow: "nullable", fallback: 0, preserve: false });
- * schema.parse("oops");    // 0 (invalid string replaced with fallback)
- * schema.parse(null);      // 0
+ * // Passing type first, options second
+ * const schemaTyped = toValidNumber(z.number().min(10), { fallback: 0 });
+ * schemaTyped.parse(5);    // 0 (invalid, replaced with fallback)
+ * schemaTyped.parse(20);   // 20
  *
  * @example
- * const schema = toValidNumber({ allow: "nullish", fallback: 99, preserve: false });
- * schema.parse("abc");     // 99 (invalid string → fallback)
- * schema.parse(null);      // 99
- * schema.parse(undefined); // 99
+ * // With allow="nullish" and custom fallback
+ * const schemaFallback = toValidNumber({ allow: "nullish", fallback: 99, preserve: false });
+ * schemaFallback.parse("abc");     // 99
+ * schemaFallback.parse(null);      // 99
+ * schemaFallback.parse(undefined); // 99
  */
+
+export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
+  type: T,
+  options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "none" },
+): z.ZodPipe<
+  z.ZodTransform,
+  T extends z.ZodNumber
+    ? z.ZodNumber | (K extends null | undefined ? z.ZodType<z.infer<T>> : z.ZodType<K>)
+    : K extends null | undefined
+      ? z.ZodType<z.infer<T>>
+      : z.ZodType<K>
+>;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "none" },
@@ -104,14 +124,35 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
+  type: T,
+  options: Omit<ToValidNumberOptions<T, K>, "type"> & { preserve: false },
+): z.ZodPipe<z.ZodTransform, T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>;
+
+export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform, T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>;
+
+export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
+  type: T,
+  options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "optional" },
+): z.ZodPipe<
+  z.ZodTransform,
+  z.ZodOptional<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
+>;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<
   z.ZodTransform,
   z.ZodOptional<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
+>;
+
+export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
+  type: T,
+  options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "nullable" },
+): z.ZodPipe<
+  z.ZodTransform,
+  z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
@@ -122,14 +163,27 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
+  type: T,
+  options?: Omit<ToValidNumberOptions<T, K>, "type">,
+): z.ZodPipe<
+  z.ZodTransform,
+  z.ZodOptional<z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>>
+>;
+
+export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options?: ToValidNumberOptions<T, K>,
 ): z.ZodPipe<
   z.ZodTransform,
   z.ZodOptional<z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>>
 >;
 
-export function toValidNumber<T extends z.ZodType, K>(options: ToValidNumberOptions<T, K> = {}) {
-  const { type = z.number(), fallback = null, allow = "nullish", preserve = true } = options;
+export function toValidNumber<T extends z.ZodType, K>(
+  arg1: T | ToValidNumberOptions<T, K> = {},
+  arg2: ToValidNumberOptions<T, K> = {},
+) {
+  const type = (arg1 instanceof z.ZodType ? arg1 : (arg1.type ?? arg2.type)) ?? z.number();
+  const options = (arg1 instanceof z.ZodType ? arg2 : arg1) ?? {};
+  const { fallback = null, allow = "nullish", preserve = true } = options;
 
   let finalSchema;
   switch (allow) {

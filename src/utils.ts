@@ -1,6 +1,6 @@
 import z from "zod";
 
-export function nonnullable<T>(schema: z.ZodType<T>, message?: string) {
+export function nonNullable<T>(schema: z.ZodType<T>, message?: string) {
   return schema.transform((val, ctx) => {
     if (val == null) {
       ctx.addIssue({

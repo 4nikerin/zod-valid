@@ -57,10 +57,14 @@ type ToValidStringOptions<T extends z.ZodType, K = null> = {
  *   - `preserve: false` — replaces the empty value with `fallback`.
  * - Any other value is coerced to a string using `String(val)`.
  *
- * @param options Behavior options:
+ * @param typeOrOptions Either:
+ *   - A base Zod schema to apply (`z.ZodType`), **or**
+ *   - An options object (see below).
+ *
+ * @param [options] Behavior options (if `type` is passed as first argument):
  *   - `type` — base Zod schema to apply. Default `z.string()`.
  *   - `fallback` — value to return when input is invalid or an allowed empty value should be replaced. Default `null`.
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
  *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A Zod schema that:
@@ -68,41 +72,59 @@ type ToValidStringOptions<T extends z.ZodType, K = null> = {
  *   - Optionally wraps with `.optional()`, `.nullable()`, or `.nullish()` based on `allow`.
  *
  * @example
+ * // Default usage (string coercion with nullish allowed)
  * const schema = toValidString();
  * schema.parse("abc");      // "abc"
  * schema.parse(123);        // "123"
- * schema.parse(null);       // null  (default allow="nullish", preserve=true)
+ * schema.parse(null);       // null
  *
  * @example
+ * // Pass only options
  * const schema = toValidString({ allow: "optional" });
- * schema.parse(null);       // "null"  (null is coerced to string)
+ * schema.parse(null);       // "null" (null is coerced to string)
  * schema.parse(undefined);  // undefined
  *
  * @example
- * const schema = toValidString({ allow: "nullable", fallback: "N/A", preserve: false });
+ * // Pass type first, then options
+ * const schema = toValidString(z.string().min(2), { fallback: "N/A", preserve: false });
+ * schema.parse("a");        // "N/A"
+ * schema.parse("abc");      // "abc"
  * schema.parse(null);       // "N/A"
- * schema.parse("test");     // "test"
  *
  * @example
- * const schema = toValidString({ allow: "nullish", fallback: "empty", preserve: false });
- * schema.parse(null);       // "empty"
- * schema.parse(undefined);  // "empty"
- *
- * @example
+ * // Using custom type in options
  * const schema = toValidString({ type: z.email(), fallback: "empty" });
- * schema.parse("example@hostname.com"); // "example@hostname.com"
- * schema.parse("hello");                // "empty"
- * schema.parse(null);                   // null
- * schema.parse(undefined);              // undefined
+ * schema.parse("example@host.com"); // "example@host.com"
+ * schema.parse("oops");             // "empty"
+ * schema.parse(null);               // null
+ * schema.parse(undefined);          // undefined
  */
+
+export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "none" },
+): z.ZodPipe<z.ZodTransform, z.ZodString>;
 
 export function toValidString<T extends z.ZodType, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform, z.ZodString>;
 
 export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options: Omit<ToValidStringOptions<T, K>, "type"> & { preserve: false },
+): z.ZodPipe<z.ZodTransform, z.ZodString | z.ZodType<K>>;
+
+export function toValidString<T extends z.ZodType, K = null>(
   options: ToValidStringOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform, z.ZodString | z.ZodType<K>>;
+
+export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options: Omit<ToValidStringOptions<T, K>, "type"> & {
+    allow: "optional";
+    preserve: false;
+  },
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodString | z.ZodType<K>>>;
 
 export function toValidString<T extends z.ZodType, K = null>(
   options: ToValidStringOptions<T, K> & {
@@ -112,19 +134,39 @@ export function toValidString<T extends z.ZodType, K = null>(
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodString | z.ZodType<K>>>;
 
 export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "optional" },
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodString>>;
+
+export function toValidString<T extends z.ZodType, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodString>>;
+
+export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "nullable" },
+): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodString>>;
 
 export function toValidString<T extends z.ZodType, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodString>>;
 
 export function toValidString<T extends z.ZodType, K = null>(
+  type: T,
+  options?: Omit<ToValidStringOptions<T, K>, "type">,
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodString>>>;
+
+export function toValidString<T extends z.ZodType, K = null>(
   options?: ToValidStringOptions<T, K>,
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodString>>>;
 
-export function toValidString<T extends z.ZodType, K>(options: ToValidStringOptions<T, K> = {}) {
-  const { type = z.string(), fallback = null, allow = "nullish", preserve = true } = options;
+export function toValidString<T extends z.ZodType, K>(
+  arg1: T | ToValidStringOptions<T, K> = {},
+  arg2: ToValidStringOptions<T, K> = {},
+) {
+  const type = (arg1 instanceof z.ZodType ? arg1 : (arg1.type ?? arg2.type)) ?? z.string();
+  const options = (arg1 instanceof z.ZodType ? arg2 : arg1) ?? {};
+  const { fallback = null, allow = "nullish", preserve = true } = options;
 
   let finalSchema;
   switch (allow) {

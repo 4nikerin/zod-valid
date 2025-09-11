@@ -5,7 +5,7 @@ type ToValidISOAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidISO`
  */
-type ToValidISOOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
+type ToValidIsoOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
   /**
    * Base Zod schema to apply to the input before coercion.
    * Default is `z.iso.datetime()`.
@@ -59,10 +59,14 @@ type ToValidISOOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
  *   - Strings are parsed as dates. Invalid dates return `fallback`.
  *   - Non-strings return `fallback`.
  *
- * @param options Behavior options:
+ * @param typeOrOptions Either:
+ *   - A base Zod schema to apply (`z.ZodISODateTime` or other `z.ZodType`), **or**
+ *   - An options object (see below).
+ *
+ * @param [options] Behavior options (if `type` is passed as first argument):
  *   - `type` — base Zod schema to apply. Default `z.iso.datetime()`.
  *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced. Default `null`.
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
  *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that:
@@ -70,43 +74,83 @@ type ToValidISOOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
  *   - Optionally wraps with `.optional()`, `.nullable()`, or `.nullish()` based on `allow`.
  *
  * @example
+ * // Default usage
  * const schema = toValidISO();
- * schema.parse("2025-09-02T10:00:00Z");  // "2025-09-02T10:00:00Z"
- * schema.parse(null);                    // null (default allow="nullish", preserve=true)
+ * schema.parse("2025-09-02T10:00:00Z"); // "2025-09-02T10:00:00Z"
+ * schema.parse(null);                   // null (allow="nullish", preserve=true)
  *
  * @example
- * const schema = toValidISO({ allow: "optional" });
- * schema.parse(undefined);               // undefined
- * schema.parse(null);                    // null (default fallback)
+ * // Passing options only
+ * const schemaOpt = toValidISO({ allow: "optional" });
+ * schemaOpt.parse(null);      // null → fallback if preserve=false
+ * schemaOpt.parse(undefined); // undefined
  *
  * @example
- * const schema = toValidISO({ allow: "nullable", fallback: "1970-01-01T00:00:00Z", preserve: false });
- * schema.parse(null);                    // "1970-01-01T00:00:00Z"
- * schema.parse("invalid");               // "1970-01-01T00:00:00Z"
+ * // Passing type first, options second
+ * const schemaTyped = toValidISO(z.string().datetime(), { fallback: "1970-01-01T00:00:00Z" });
+ * schemaTyped.parse("invalid");    // "1970-01-01T00:00:00Z"
+ * schemaTyped.parse("2025-09-11"); // "2025-09-11T00:00:00.000Z"
+ *
+ * @example
+ * // With allow="nullish" and custom fallback
+ * const schemaFallback = toValidISO({ allow: "nullish", fallback: "N/A", preserve: false });
+ * schemaFallback.parse("abc");     // "N/A"
+ * schemaFallback.parse(null);      // "N/A"
+ * schemaFallback.parse(undefined); // "N/A"
  */
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
-  options: ToValidISOOptions<T, K> & { allow: "none" },
+  type: T,
+  options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform, z.ZodType<NonNullable<z.infer<T> | K>>>;
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
-  options: ToValidISOOptions<T, K> & { preserve: false },
+  options: ToValidIsoOptions<T, K> & { allow: "none" },
+): z.ZodPipe<z.ZodTransform, z.ZodType<NonNullable<z.infer<T> | K>>>;
+
+export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+  type: T,
+  options: Omit<ToValidIsoOptions<T, K>, "type"> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T> | K>>;
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
-  options: ToValidISOOptions<T, K> & { allow: "optional" },
+  options: ToValidIsoOptions<T, K> & { preserve: false },
+): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T> | K>>;
+
+export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+  type: T,
+  options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T> | K>>>;
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
-  options: ToValidISOOptions<T, K> & { allow: "nullable" },
+  options: ToValidIsoOptions<T, K> & { allow: "optional" },
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T> | K>>>;
+
+export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+  type: T,
+  options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T> | K>>>;
 
 export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
-  options?: ToValidISOOptions<T, K>,
+  options: ToValidIsoOptions<T, K> & { allow: "nullable" },
+): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T> | K>>>;
+
+export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+  type: T,
+  options?: Omit<ToValidIsoOptions<T, K>, "type">,
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T> | K>>>>;
 
-export function toValidISO<T extends z.ZodType, K>(options: ToValidISOOptions<T, K> = {}) {
-  const { type = z.iso.datetime(), fallback = null, allow = "nullish", preserve = true } = options;
+export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+  options?: ToValidIsoOptions<T, K>,
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T> | K>>>>;
+
+export function toValidISO<T extends z.ZodType, K>(
+  arg1: T | ToValidIsoOptions<T, K> = {},
+  arg2: ToValidIsoOptions<T, K> = {},
+) {
+  const type = (arg1 instanceof z.ZodType ? arg1 : (arg1.type ?? arg2.type)) ?? z.iso.datetime();
+  const options = (arg1 instanceof z.ZodType ? arg2 : arg1) ?? {};
+  const { fallback = null, allow = "nullish", preserve = true } = options;
 
   let finalSchema;
   switch (allow) {

@@ -46,9 +46,9 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  * and invalid inputs.
  *
  * Behavior:
- * - Converts strings like `"true"`/`"false"` to boolean.
+ * - Converts strings like `"true"`/`"false"` (case-insensitive) to boolean.
  * - Converts numbers to boolean (`0` → `false`, others → `true`).
- * - Objects with keys are treated as `true`, empty objects as `false`.
+ * - Objects: non-empty objects → `true`, empty objects → `false`.
  * - Controls which "empty" values are allowed using the `allow` option:
  *   - `"none"` — neither `null` nor `undefined` are allowed.
  *   - `"optional"` — only `undefined` is considered an allowed empty value.
@@ -59,10 +59,14 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  *   - `preserve: false` — replaces the empty value with `fallback`.
  * - Any other invalid value is coerced to boolean following the rules above.
  *
- * @param options Behavior options:
+ * @param typeOrOptions Either:
+ *   - A base Zod schema to apply (`z.ZodBoolean` or other `z.ZodType`), **or**
+ *   - An options object (see below).
+ *
+ * @param [options] Behavior options (if `type` is passed as first argument):
  *   - `type` — base Zod schema to apply. Default `z.boolean()`.
  *   - `fallback` — value returned when input is invalid or an allowed empty value should be replaced. Default `null`.
- *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`. Default `"nullish"`.
+ *   - `allow` — which empty values are allowed (`"none"`, `"optional"`, `"nullable"`, `"nullish"`). Default `"nullish"`.
  *   - `preserve` — whether to return allowed empty values as-is (`true`) or replace them with `fallback`. Default `true`.
  *
  * @returns A ZodPipe schema that:
@@ -70,46 +74,86 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  *   - Optionally wraps with `.optional()`, `.nullable()`, or `.nullish()` based on `allow`.
  *
  * @example
+ * // Default usage
  * const schema = toValidBoolean();
- * schema.parse("true");      // true
- * schema.parse("FALSE");     // false
- * schema.parse(1);           // true
- * schema.parse(0);           // false
- * schema.parse(null);        // null (default allow="nullish", preserve=true)
+ * schema.parse("true");   // true
+ * schema.parse("FALSE");  // false
+ * schema.parse(1);        // true
+ * schema.parse(0);        // false
+ * schema.parse(null);     // null (allow="nullish", preserve=true)
  *
  * @example
- * const schema = toValidBoolean({ allow: "optional" });
- * schema.parse(null);        // false
- * schema.parse(undefined);   // undefined
+ * // Passing options only
+ * const schemaOpt = toValidBoolean({ allow: "optional" });
+ * schemaOpt.parse(null);      // null → fallback if preserve=false
+ * schemaOpt.parse(undefined); // undefined
  *
  * @example
- * const schema = toValidBoolean({ allow: "nullable", fallback: true, preserve: false });
- * schema.parse(null);        // true
- * schema.parse("invalid");   // true (invalid → fallback)
+ * // Passing type first, options second
+ * const schemaTyped = toValidBoolean(z.boolean(), { fallback: false });
+ * schemaTyped.parse("true"); // true
+ * schemaTyped.parse("oops"); // false
+ *
+ * @example
+ * // With allow="nullish" and custom fallback
+ * const schemaFallback = toValidBoolean({ allow: "nullish", fallback: false, preserve: false });
+ * schemaFallback.parse(null);      // false
+ * schemaFallback.parse(undefined); // false
+ * schemaFallback.parse("oops");    // false
  */
+
+export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+  type: T,
+  options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "none" },
+): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+  type: T,
+  options: Omit<ToValidBooleanOptions<T, K>, "type"> & { preserve: false },
+): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>> | z.ZodType<K>>;
+
+export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>> | z.ZodType<K>>;
+
+export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+  type: T,
+  options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "optional" },
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+  type: T,
+  options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "nullable" },
+): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T>>>>;
+
+export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T>>>>;
+
+export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+  type: T,
+  options?: Omit<ToValidBooleanOptions<T, K>, "type">,
+): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options?: ToValidBooleanOptions<T, K>,
 ): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>>;
 
-export function toValidBoolean<T extends z.ZodType, K>(options: ToValidBooleanOptions<T, K> = {}) {
-  const { type = z.boolean(), fallback = null, allow = "nullish", preserve = true } = options;
+export function toValidBoolean<T extends z.ZodType, K>(
+  arg1: T | ToValidBooleanOptions<T, K> = {},
+  arg2: ToValidBooleanOptions<T, K> = {},
+) {
+  const type = (arg1 instanceof z.ZodType ? arg1 : (arg1.type ?? arg2.type)) ?? z.boolean();
+  const options = (arg1 instanceof z.ZodType ? arg2 : arg1) ?? {};
+  const { fallback = null, allow = "nullish", preserve = true } = options;
 
   let finalSchema;
   switch (allow) {

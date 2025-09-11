@@ -4,6 +4,42 @@ import toValidArray from "../src/toValidArray";
 import toValidObject from "../src/toValidObject";
 
 describe("toValidArray", () => {
+  it("without params", () => {
+    const schema = toValidArray();
+
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<unknown[] | null | undefined>();
+
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
+    expect(schema.parse([])).toStrictEqual([]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse(undefined)).toBe(undefined);
+  });
+
+  it("empty params", () => {
+    const schema = toValidArray({});
+
+    expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<unknown[] | null | undefined>();
+
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
+    expect(schema.parse([])).toStrictEqual([]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse(undefined)).toBe(undefined);
+  });
+
   it("default params", () => {
     const schema = toValidArray({
       fallback: null,
@@ -35,8 +71,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -46,9 +82,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:string | s:true  ", () => {
@@ -56,8 +92,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -67,9 +103,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:string | s:false ", () => {
@@ -77,8 +113,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -88,9 +124,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:number |         ", () => {
@@ -98,17 +134,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:number | s:true  ", () => {
@@ -116,17 +152,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:number | s:false ", () => {
@@ -134,17 +170,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:object |         ", () => {
@@ -168,17 +204,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:object | s:true  ", () => {
@@ -199,17 +235,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            |         | t:object | s:false ", () => {
@@ -234,17 +270,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:string |         ", () => {
@@ -255,8 +291,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -266,9 +302,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:string | s:true  ", () => {
@@ -280,8 +316,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -291,9 +327,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:string | s:false ", () => {
@@ -305,8 +341,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -316,9 +352,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:number |         ", () => {
@@ -329,17 +365,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:number | s:true  ", () => {
@@ -351,17 +387,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:number | s:false ", () => {
@@ -373,17 +409,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:object |         ", () => {
@@ -408,17 +444,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:object | s:true  ", () => {
@@ -440,17 +476,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:true  | t:object | s:false ", () => {
@@ -476,17 +512,17 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(undefined);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
   it("|      |            | p:false | t:string |         ", () => {
@@ -497,8 +533,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -508,9 +544,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:string | s:true  ", () => {
@@ -522,8 +558,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -533,9 +569,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:string | s:false ", () => {
@@ -547,8 +583,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -558,9 +594,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:number |         ", () => {
@@ -571,17 +607,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:number | s:true  ", () => {
@@ -593,17 +629,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:number | s:false ", () => {
@@ -615,17 +651,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:object |         ", () => {
@@ -649,17 +685,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:object | s:true  ", () => {
@@ -680,17 +716,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      |            | p:false | t:object | s:false ", () => {
@@ -715,17 +751,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:string |         ", () => {
@@ -736,8 +772,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -747,9 +783,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:string | s:true  ", () => {
@@ -761,8 +797,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -772,9 +808,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:string | s:false ", () => {
@@ -786,8 +822,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -797,9 +833,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:number |         ", () => {
@@ -810,17 +846,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:number | s:true  ", () => {
@@ -832,17 +868,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:number | s:false ", () => {
@@ -854,17 +890,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:object |         ", () => {
@@ -887,17 +923,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:object | s:true  ", () => {
@@ -917,17 +953,17 @@ describe("toValidArray", () => {
       }[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     |         | t:object | s:false ", () => {
@@ -951,17 +987,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:string |         ", () => {
@@ -973,8 +1009,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -984,9 +1020,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:string | s:true  ", () => {
@@ -999,8 +1035,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1010,9 +1046,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:string | s:false ", () => {
@@ -1025,8 +1061,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1036,9 +1072,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:number |        ", () => {
@@ -1050,17 +1086,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:number | s:true ", () => {
@@ -1073,17 +1109,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:number | s:false ", () => {
@@ -1096,17 +1132,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:object |         ", () => {
@@ -1130,17 +1166,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:object | s:true  ", () => {
@@ -1161,17 +1197,17 @@ describe("toValidArray", () => {
       }[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:true  | t:object | s:false ", () => {
@@ -1196,17 +1232,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:string |         ", () => {
@@ -1218,8 +1254,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1229,9 +1265,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:string | s:true  ", () => {
@@ -1244,8 +1280,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1255,9 +1291,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:string | s:false ", () => {
@@ -1270,8 +1306,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1281,9 +1317,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:number |         ", () => {
@@ -1295,17 +1331,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:number | s:true  ", () => {
@@ -1318,17 +1354,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:number | s:false ", () => {
@@ -1341,17 +1377,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[]>();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:object |         ", () => {
@@ -1375,17 +1411,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:object | s:true  ", () => {
@@ -1406,17 +1442,17 @@ describe("toValidArray", () => {
       }[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:none     | p:false | t:object | s:false ", () => {
@@ -1441,17 +1477,17 @@ describe("toValidArray", () => {
       )[]
     >();
 
-    expect(() => schema.parse("value")).toThrow(z.ZodError);
-    expect(() => schema.parse(42)).toThrow(z.ZodError);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(() => schema.parse({ value: 42 })).toThrow(z.ZodError);
-    expect(() => schema.parse(null)).toThrow(z.ZodError);
-    expect(() => schema.parse(undefined)).toThrow(z.ZodError);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional |         | t:string |         ", () => {
@@ -1462,8 +1498,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1473,8 +1509,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1487,8 +1523,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1498,8 +1534,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1512,8 +1548,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1523,8 +1559,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1536,16 +1572,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1558,16 +1594,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1580,16 +1616,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1615,16 +1651,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1647,16 +1683,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1683,16 +1719,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1705,8 +1741,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1716,8 +1752,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1731,8 +1767,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1742,8 +1778,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1757,8 +1793,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1768,8 +1804,8 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1782,16 +1818,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1805,16 +1841,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1828,16 +1864,16 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null | undefined>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1864,16 +1900,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1897,16 +1933,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1934,16 +1970,16 @@ describe("toValidArray", () => {
       | undefined
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
   });
 
@@ -1956,8 +1992,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1967,9 +2003,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:string | s:true  ", () => {
@@ -1982,8 +2018,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -1993,9 +2029,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:string | s:false ", () => {
@@ -2008,8 +2044,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2019,9 +2055,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:number |         ", () => {
@@ -2033,17 +2069,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:number | s:true  ", () => {
@@ -2056,17 +2092,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:number | s:false ", () => {
@@ -2079,17 +2115,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:object |         ", () => {
@@ -2114,17 +2150,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:object | s:true  ", () => {
@@ -2146,17 +2182,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:optional | p:false | t:object | s:false ", () => {
@@ -2182,17 +2218,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:string |         ", () => {
@@ -2203,8 +2239,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2214,9 +2250,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:string | s:true  ", () => {
@@ -2228,8 +2264,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2239,9 +2275,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:string | s:false ", () => {
@@ -2253,8 +2289,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2264,9 +2300,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:number |         ", () => {
@@ -2277,17 +2313,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:number | s:true  ", () => {
@@ -2299,17 +2335,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:number | s:false ", () => {
@@ -2321,17 +2357,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:object |         ", () => {
@@ -2355,17 +2391,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:object | s:true  ", () => {
@@ -2386,17 +2422,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable |         | t:object | s:false ", () => {
@@ -2421,17 +2457,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:string |         ", () => {
@@ -2443,8 +2479,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2454,9 +2490,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:string | s:true  ", () => {
@@ -2469,8 +2505,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2480,9 +2516,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:string | s:false ", () => {
@@ -2495,8 +2531,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2506,9 +2542,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:number |         ", () => {
@@ -2520,17 +2556,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:number | s:true  ", () => {
@@ -2543,17 +2579,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:number | s:false ", () => {
@@ -2566,17 +2602,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:object |         ", () => {
@@ -2601,17 +2637,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:object | s:true  ", () => {
@@ -2633,17 +2669,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:true  | t:object | s:false ", () => {
@@ -2669,17 +2705,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:string | s:      ", () => {
@@ -2691,8 +2727,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2702,9 +2738,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:string | s:true  ", () => {
@@ -2717,8 +2753,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2728,9 +2764,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:string | s:false ", () => {
@@ -2743,8 +2779,8 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<string[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual(["1", "2"]);
     expect(schema.parse([3, 4])).toStrictEqual(["3", "4"]);
@@ -2754,9 +2790,9 @@ describe("toValidArray", () => {
       "[object Object]",
       "[object Object]",
     ]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:number |         ", () => {
@@ -2768,17 +2804,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:number | s:true  ", () => {
@@ -2791,17 +2827,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:number | s:false ", () => {
@@ -2814,17 +2850,17 @@ describe("toValidArray", () => {
 
     expectTypeOf<z.infer<typeof schema>>().toEqualTypeOf<number[] | null>();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
     expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
     expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
-    expect(schema.parse({ value: 42 })).toBe(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:object |         ", () => {
@@ -2849,17 +2885,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:object | s:true  ", () => {
@@ -2881,17 +2917,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([]);
     expect(schema.parse([3, 4])).toStrictEqual([]);
     expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("|      | a:nullable | p:false | t:object | s:false ", () => {
@@ -2917,17 +2953,17 @@ describe("toValidArray", () => {
       | null
     >();
 
-    expect(schema.parse("value")).toBe(null);
-    expect(schema.parse(42)).toBe(null);
+    expect(schema.parse("value")).toStrictEqual([]);
+    expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
     expect(schema.parse([3, 4])).toStrictEqual([null, null]);
     expect(schema.parse([[1, 2]])).toStrictEqual([null]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
-    expect(schema.parse({ value: 42 })).toStrictEqual(null);
-    expect(schema.parse(null)).toBe(null);
-    expect(schema.parse(undefined)).toBe(null);
+    expect(schema.parse({ value: 42 })).toStrictEqual([]);
+    expect(schema.parse(null)).toStrictEqual([]);
+    expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
   it("| f:[] |            |         | t:string |         ", () => {
@@ -3017,9 +3053,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -3094,11 +3130,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -3263,9 +3299,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -3343,13 +3379,13 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
@@ -3382,7 +3418,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
@@ -3419,7 +3455,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual(undefined);
   });
 
@@ -3514,9 +3550,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -3592,11 +3628,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -3759,9 +3795,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -3838,11 +3874,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -4011,9 +4047,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -4092,11 +4128,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -4265,9 +4301,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -4346,11 +4382,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -4515,9 +4551,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -4594,11 +4630,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual(undefined);
@@ -4766,9 +4802,9 @@ describe("toValidArray", () => {
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -4846,11 +4882,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual(undefined);
@@ -5021,9 +5057,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -5102,11 +5138,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -5271,9 +5307,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -5350,13 +5386,13 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5388,7 +5424,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5424,7 +5460,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5523,9 +5559,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -5605,13 +5641,13 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5644,7 +5680,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5681,7 +5717,7 @@ describe("toValidArray", () => {
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
-    expect(schema.parse(null)).toStrictEqual(null);
+    expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toStrictEqual([]);
   });
 
@@ -5780,9 +5816,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -5861,11 +5897,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toStrictEqual([]);
     expect(schema.parse(42)).toStrictEqual([]);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toStrictEqual([]);
     expect(schema.parse(null)).toStrictEqual([]);
     expect(schema.parse(undefined)).toStrictEqual([]);
@@ -6026,9 +6062,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -6104,11 +6140,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -6275,9 +6311,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -6356,11 +6392,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -6529,9 +6565,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -6608,11 +6644,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -6777,9 +6813,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -6856,11 +6892,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -7029,9 +7065,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -7111,11 +7147,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -7286,9 +7322,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -7368,11 +7404,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -7539,9 +7575,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -7619,11 +7655,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -7794,9 +7830,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -7877,11 +7913,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(undefined);
@@ -8078,9 +8114,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -8136,11 +8172,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -8307,9 +8343,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(12);
@@ -8387,11 +8423,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(12);
@@ -8562,9 +8598,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(12);
@@ -8645,11 +8681,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(null);
     expect(schema.parse(undefined)).toBe(12);
@@ -8822,9 +8858,9 @@ describe("toValidArray", () => {
     expect(schema.parse([])).toStrictEqual([]);
     expect(schema.parse(["1", "2"])).toStrictEqual([1, 2]);
     expect(schema.parse([3, 4])).toStrictEqual([3, 4]);
-    expect(() => schema.parse([[1, 2]])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }])).toThrow(z.ZodError);
-    expect(() => schema.parse([{ value: 123 }, { uid: "123" }])).toThrow(z.ZodError);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }])).toStrictEqual([]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);
@@ -8904,11 +8940,11 @@ describe("toValidArray", () => {
     expect(schema.parse("value")).toBe(12);
     expect(schema.parse(42)).toBe(12);
     expect(schema.parse([])).toStrictEqual([]);
-    expect(schema.parse(["1", "2"])).toStrictEqual([null, null]);
-    expect(schema.parse([3, 4])).toStrictEqual([null, null]);
-    expect(schema.parse([[1, 2]])).toStrictEqual([null]);
+    expect(schema.parse(["1", "2"])).toStrictEqual([]);
+    expect(schema.parse([3, 4])).toStrictEqual([]);
+    expect(schema.parse([[1, 2]])).toStrictEqual([]);
     expect(schema.parse([{ value: 123 }])).toStrictEqual([{ value: 123 }]);
-    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }, null]);
+    expect(schema.parse([{ value: 123 }, { uid: "123" }])).toStrictEqual([{ value: 123 }]);
     expect(schema.parse({ value: 42 })).toBe(12);
     expect(schema.parse(null)).toBe(12);
     expect(schema.parse(undefined)).toBe(12);

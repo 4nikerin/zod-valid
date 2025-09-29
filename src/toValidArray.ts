@@ -113,7 +113,15 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "none" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    | (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+    | (K extends never[]
+        ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+        : K extends null | undefined
+          ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+          : K)
+  >,
   | z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
   | (K extends never[]
       ? z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
@@ -125,7 +133,15 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
 export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "none" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    | (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+    | (K extends never[]
+        ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+        : K extends null | undefined
+          ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+          : K)
+  >,
   | z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
   | (K extends never[]
       ? z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
@@ -138,7 +154,11 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { preserve: false },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    | (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+    | (K extends never[] ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] : K)
+  >,
   | z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
   | (K extends never[]
       ? z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
@@ -148,7 +168,11 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
 export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { preserve: false },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    | (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[]
+    | (K extends never[] ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] : K)
+  >,
   | z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
   | (K extends never[]
       ? z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>
@@ -159,7 +183,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | undefined
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | undefined
+  >,
   K extends never[]
     ? z.ZodOptional<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>
     : z.ZodOptional<
@@ -172,7 +201,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
 export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "optional" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | undefined
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | undefined
+  >,
   K extends never[]
     ? z.ZodOptional<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>
     : z.ZodOptional<
@@ -186,7 +220,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | null
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | null
+  >,
   K extends never[]
     ? z.ZodNullable<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>
     : z.ZodNullable<
@@ -199,7 +238,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
 export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "nullable" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | null
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | null
+  >,
   K extends never[]
     ? z.ZodNullable<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>
     : z.ZodNullable<
@@ -213,7 +257,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
   type: T,
   options?: Omit<ToValidArrayOptions<T, K, S>, "type">,
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | null | undefined
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | null | undefined
+  >,
   K extends never[]
     ? z.ZodOptional<
         z.ZodNullable<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>
@@ -230,7 +279,12 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
 export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
   options?: ToValidArrayOptions<T, K, S>,
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    K extends never[]
+      ? (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | null | undefined
+      : (S extends true ? NonNullable<z.infer<T>> : z.infer<T>)[] | K | null | undefined
+  >,
   K extends never[]
     ? z.ZodOptional<
         z.ZodNullable<z.ZodArray<S extends true ? z.ZodType<NonNullable<z.infer<T>>> : T>>

@@ -105,47 +105,53 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "none" },
-): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T>>, z.ZodType<z.infer<T>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "none" },
-): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T>>, z.ZodType<z.infer<T>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { preserve: false },
-): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>> | z.ZodType<K>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T>> | z.ZodType<K>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { preserve: false },
-): z.ZodPipe<z.ZodTransform, z.ZodType<z.infer<T>> | z.ZodType<K>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T>> | z.ZodType<K>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "optional" },
-): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T>>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | undefined>, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "optional" },
-): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodType<z.infer<T>>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | undefined>, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "nullable" },
-): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T>>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | null>, z.ZodNullable<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "nullable" },
-): z.ZodPipe<z.ZodTransform, z.ZodNullable<z.ZodType<z.infer<T>>>>;
+): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | null>, z.ZodNullable<z.ZodType<z.infer<T>>>>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   type: T,
   options?: Omit<ToValidBooleanOptions<T, K>, "type">,
-): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>>;
+): z.ZodPipe<
+  z.ZodTransform<unknown, z.infer<T> | null | undefined>,
+  z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>
+>;
 
 export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   options?: ToValidBooleanOptions<T, K>,
-): z.ZodPipe<z.ZodTransform, z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>>;
+): z.ZodPipe<
+  z.ZodTransform<unknown, z.infer<T> | null | undefined>,
+  z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>
+>;
 
 export function toValidBoolean<T extends z.ZodType, K>(
   arg1: T | ToValidBooleanOptions<T, K> = {},

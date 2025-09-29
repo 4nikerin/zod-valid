@@ -104,7 +104,14 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   type: T,
   options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    T extends z.ZodNumber
+      ? number | (K extends null | undefined ? z.infer<T> : K)
+      : K extends null | undefined
+        ? z.infer<T>
+        : K
+  >,
   T extends z.ZodNumber
     ? z.ZodNumber | (K extends null | undefined ? z.ZodType<z.infer<T>> : z.ZodType<K>)
     : K extends null | undefined
@@ -115,7 +122,14 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<
+    unknown,
+    T extends z.ZodNumber
+      ? number | (K extends null | undefined ? z.infer<T> : K)
+      : K extends null | undefined
+        ? z.infer<T>
+        : K
+  >,
   T extends z.ZodNumber
     ? z.ZodNumber | (K extends null | undefined ? z.ZodType<z.infer<T>> : z.ZodType<K>)
     : K extends null | undefined
@@ -126,24 +140,30 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   type: T,
   options: Omit<ToValidNumberOptions<T, K>, "type"> & { preserve: false },
-): z.ZodPipe<z.ZodTransform, T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>;
+): z.ZodPipe<
+  z.ZodTransform<unknown, T extends z.ZodNumber ? number | K : K>,
+  T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>
+>;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { preserve: false },
-): z.ZodPipe<z.ZodTransform, T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>;
+): z.ZodPipe<
+  z.ZodTransform<unknown, T extends z.ZodNumber ? number | K : K>,
+  T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>
+>;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   type: T,
   options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | undefined>,
   z.ZodOptional<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | undefined>,
   z.ZodOptional<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
 >;
 
@@ -151,14 +171,14 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   type: T,
   options: Omit<ToValidNumberOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | null>,
   z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options: ToValidNumberOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | null>,
   z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>
 >;
 
@@ -166,14 +186,14 @@ export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   type: T,
   options?: Omit<ToValidNumberOptions<T, K>, "type">,
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | null | undefined>,
   z.ZodOptional<z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>>
 >;
 
 export function toValidNumber<T extends z.ZodType = z.ZodNumber, K = null>(
   options?: ToValidNumberOptions<T, K>,
 ): z.ZodPipe<
-  z.ZodTransform,
+  z.ZodTransform<unknown, (T extends z.ZodNumber ? number | K : K) | null | undefined>,
   z.ZodOptional<z.ZodNullable<T extends z.ZodNumber ? z.ZodNumber | z.ZodType<K> : z.ZodType<K>>>
 >;
 

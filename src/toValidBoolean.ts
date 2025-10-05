@@ -5,7 +5,7 @@ type ToValidBooleanAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidBoolean`
  */
-type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
+type ToValidBooleanOptions<T extends z.ZodTypeAny = z.ZodBoolean, K = null> = {
   /**
    * Base Zod schema to apply to the input before coercion.
    * Default is `z.boolean()`.
@@ -102,43 +102,43 @@ type ToValidBooleanOptions<T extends z.ZodType = z.ZodBoolean, K = null> = {
  * schemaFallback.parse("oops");    // false
  */
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T>>, z.ZodType<z.infer<T>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T>>, z.ZodType<z.infer<T>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T>> | z.ZodType<K>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T>> | z.ZodType<K>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | undefined>, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | undefined>, z.ZodOptional<z.ZodType<z.infer<T>>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   type: T,
   options: Omit<ToValidBooleanOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | null>, z.ZodNullable<z.ZodType<z.infer<T>>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   options: ToValidBooleanOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | null>, z.ZodNullable<z.ZodType<z.infer<T>>>>;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   type: T,
   options?: Omit<ToValidBooleanOptions<T, K>, "type">,
 ): z.ZodPipe<
@@ -146,14 +146,14 @@ export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
   z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>
 >;
 
-export function toValidBoolean<T extends z.ZodType = z.ZodBoolean, K = null>(
+export function toValidBoolean<T extends z.ZodTypeAny = z.ZodBoolean, K = null>(
   options?: ToValidBooleanOptions<T, K>,
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | null | undefined>,
   z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T>>>>
 >;
 
-export function toValidBoolean<T extends z.ZodType, K>(
+export function toValidBoolean<T extends z.ZodTypeAny, K>(
   arg1: T | ToValidBooleanOptions<T, K> = {},
   arg2: ToValidBooleanOptions<T, K> = {},
 ) {

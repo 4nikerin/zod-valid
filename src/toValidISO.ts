@@ -5,7 +5,7 @@ type ToValidISOAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidISO`
  */
-type ToValidIsoOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
+type ToValidIsoOptions<T extends z.ZodTypeAny = z.ZodISODateTime, K = null> = {
   /**
    * Base Zod schema to apply to the input before coercion.
    * Default is `z.iso.datetime()`.
@@ -99,7 +99,7 @@ type ToValidIsoOptions<T extends z.ZodType = z.ZodISODateTime, K = null> = {
  * schemaFallback.parse(undefined); // "N/A"
  */
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   type: T,
   options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<
@@ -107,23 +107,23 @@ export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
   z.ZodType<NonNullable<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   options: ToValidIsoOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, NonNullable<z.infer<T> | K>>,
   z.ZodType<NonNullable<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   type: T,
   options: Omit<ToValidIsoOptions<T, K>, "type"> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T> | K>>;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   options: ToValidIsoOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, z.infer<T> | K>, z.ZodType<z.infer<T> | K>>;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   type: T,
   options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
@@ -131,14 +131,14 @@ export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
   z.ZodOptional<z.ZodType<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   options: ToValidIsoOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | undefined>,
   z.ZodOptional<z.ZodType<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   type: T,
   options: Omit<ToValidIsoOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
@@ -146,14 +146,14 @@ export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
   z.ZodNullable<z.ZodType<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   options: ToValidIsoOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | null>,
   z.ZodNullable<z.ZodType<z.infer<T> | K>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   type: T,
   options?: Omit<ToValidIsoOptions<T, K>, "type">,
 ): z.ZodPipe<
@@ -161,14 +161,14 @@ export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
   z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T> | K>>>
 >;
 
-export function toValidISO<T extends z.ZodType = z.ZodISODateTime, K = null>(
+export function toValidISO<T extends z.ZodTypeAny = z.ZodISODateTime, K = null>(
   options?: ToValidIsoOptions<T, K>,
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | null | undefined>,
   z.ZodOptional<z.ZodNullable<z.ZodType<z.infer<T> | K>>>
 >;
 
-export function toValidISO<T extends z.ZodType, K>(
+export function toValidISO<T extends z.ZodTypeAny, K>(
   arg1: T | ToValidIsoOptions<T, K> = {},
   arg2: ToValidIsoOptions<T, K> = {},
 ) {

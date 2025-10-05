@@ -5,7 +5,7 @@ type ToValidArrayAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidArray`
  */
-type ToValidArrayOptions<T extends z.ZodType, K = [], S extends boolean = true> = {
+type ToValidArrayOptions<T extends z.ZodTypeAny, K = [], S extends boolean = true> = {
   /**
    * Base Zod schema for the array elements.
    */
@@ -109,7 +109,7 @@ type ToValidArrayOptions<T extends z.ZodType, K = [], S extends boolean = true> 
  * strictSchema.parse([1, "x", 2, null, undefined]); // [1, 2]
  */
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "none" },
 ): z.ZodPipe<
@@ -130,7 +130,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
         : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform<
@@ -150,7 +150,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
         : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { preserve: false },
 ): z.ZodPipe<
@@ -165,7 +165,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { preserve: false },
 ): z.ZodPipe<
   z.ZodTransform<
@@ -179,7 +179,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       : z.ZodType<K>)
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
@@ -198,7 +198,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "optional" },
 ): z.ZodPipe<
   z.ZodTransform<
@@ -216,7 +216,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   type: T,
   options: Omit<ToValidArrayOptions<T, K, S>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
@@ -235,7 +235,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   options: ToValidArrayOptions<T, K, S> & { allow: "nullable" },
 ): z.ZodPipe<
   z.ZodTransform<
@@ -253,7 +253,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   type: T,
   options?: Omit<ToValidArrayOptions<T, K, S>, "type">,
 ): z.ZodPipe<
@@ -276,7 +276,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K = [], S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K = [], S extends boolean = true>(
   options?: ToValidArrayOptions<T, K, S>,
 ): z.ZodPipe<
   z.ZodTransform<
@@ -298,7 +298,7 @@ export function toValidArray<T extends z.ZodType, K = [], S extends boolean = tr
       >
 >;
 
-export function toValidArray<T extends z.ZodType, K, S extends boolean = true>(
+export function toValidArray<T extends z.ZodTypeAny, K, S extends boolean = true>(
   arg1: T | ToValidArrayOptions<T, K, S> = {},
   arg2: ToValidArrayOptions<T, K, S> = {},
 ) {

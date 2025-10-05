@@ -5,7 +5,7 @@ type ToValidObjectAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options for configuring the behavior of `toValidObject`.
  */
-type ToValidObjectOptions<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null> = {
+type ToValidObjectOptions<T extends z.ZodTypeAny = z.ZodObject, K = null> = {
   /**
    * Base Zod schema used to validate plain objects.
    *
@@ -109,7 +109,7 @@ type ToValidObjectOptions<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = n
  * schemaReplace.parse("oops");    // {} (invalid, replaced with fallback)
  */
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   type: T,
   options: Omit<ToValidObjectOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<
@@ -117,23 +117,23 @@ export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K
   T | (K extends never[] ? T : K extends null | undefined ? T : z.ZodType<K>)
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, T | (K extends never[] ? T : K extends null | undefined ? T : K)>,
   T | (K extends never[] ? T : K extends null | undefined ? T : z.ZodType<K>)
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   type: T,
   options: Omit<ToValidObjectOptions<T, K>, "type"> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, T | K>, T | z.ZodType<K>>;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, T | K>, T | z.ZodType<K>>;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   type: T,
   options: Omit<ToValidObjectOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<
@@ -141,14 +141,14 @@ export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K
   z.ZodOptional<z.ZodUnion<[T, z.ZodCustom<K, K>]>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | undefined>,
   z.ZodOptional<z.ZodUnion<[T, z.ZodCustom<K, K>]>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   type: T,
   options: Omit<ToValidObjectOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<
@@ -156,14 +156,14 @@ export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K
   z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   options: ToValidObjectOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | null>,
   z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   type: T,
   options?: Omit<ToValidObjectOptions<T, K>, "type">,
 ): z.ZodPipe<
@@ -171,14 +171,14 @@ export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K
   z.ZodOptional<z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum = z.ZodObject, K = null>(
+export function toValidObject<T extends z.ZodTypeAny = z.ZodObject, K = null>(
   options?: ToValidObjectOptions<T, K>,
 ): z.ZodPipe<
   z.ZodTransform<unknown, z.infer<T> | K | null | undefined>,
   z.ZodOptional<z.ZodNullable<z.ZodUnion<[T, z.ZodCustom<K, K>]>>>
 >;
 
-export function toValidObject<T extends z.ZodObject | z.ZodEnum, K>(
+export function toValidObject<T extends z.ZodTypeAny, K>(
   arg1: T | ToValidObjectOptions<T, K> = {},
   arg2: ToValidObjectOptions<T, K> = {},
 ) {

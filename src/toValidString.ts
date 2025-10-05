@@ -5,7 +5,7 @@ type ToValidStringAllow = "none" | "optional" | "nullable" | "nullish";
 /**
  * Options to configure the behavior of `toValidString`
  */
-type ToValidStringOptions<T extends z.ZodType, K = null> = {
+type ToValidStringOptions<T extends z.ZodTypeAny, K = null> = {
   /**
    * Base Zod schema to apply to the input before coercion.
    * Default is `z.string()`.
@@ -100,25 +100,25 @@ type ToValidStringOptions<T extends z.ZodType, K = null> = {
  * schema.parse(undefined);          // undefined
  */
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform<unknown, string>, z.ZodString>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "none" },
 ): z.ZodPipe<z.ZodTransform<unknown, string>, z.ZodString>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options: Omit<ToValidStringOptions<T, K>, "type"> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, string | K>, z.ZodString | z.ZodType<K>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options: ToValidStringOptions<T, K> & { preserve: false },
 ): z.ZodPipe<z.ZodTransform<unknown, string | K>, z.ZodString | z.ZodType<K>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options: Omit<ToValidStringOptions<T, K>, "type"> & {
     allow: "optional";
@@ -129,7 +129,7 @@ export function toValidString<T extends z.ZodType, K = null>(
   z.ZodOptional<z.ZodString | z.ZodType<K>>
 >;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options: ToValidStringOptions<T, K> & {
     allow: "optional";
     preserve: false;
@@ -139,25 +139,25 @@ export function toValidString<T extends z.ZodType, K = null>(
   z.ZodOptional<z.ZodString | z.ZodType<K>>
 >;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform<unknown, string | undefined>, z.ZodOptional<z.ZodString>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "optional" },
 ): z.ZodPipe<z.ZodTransform<unknown, string | undefined>, z.ZodOptional<z.ZodString>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options: Omit<ToValidStringOptions<T, K>, "type"> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform<unknown, string | null>, z.ZodNullable<z.ZodString>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options: ToValidStringOptions<T, K> & { allow: "nullable" },
 ): z.ZodPipe<z.ZodTransform<unknown, string | null>, z.ZodNullable<z.ZodString>>;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   type: T,
   options?: Omit<ToValidStringOptions<T, K>, "type">,
 ): z.ZodPipe<
@@ -165,14 +165,14 @@ export function toValidString<T extends z.ZodType, K = null>(
   z.ZodOptional<z.ZodNullable<z.ZodString>>
 >;
 
-export function toValidString<T extends z.ZodType, K = null>(
+export function toValidString<T extends z.ZodTypeAny, K = null>(
   options?: ToValidStringOptions<T, K>,
 ): z.ZodPipe<
   z.ZodTransform<unknown, string | null | undefined>,
   z.ZodOptional<z.ZodNullable<z.ZodString>>
 >;
 
-export function toValidString<T extends z.ZodType, K>(
+export function toValidString<T extends z.ZodTypeAny, K>(
   arg1: T | ToValidStringOptions<T, K> = {},
   arg2: ToValidStringOptions<T, K> = {},
 ) {
